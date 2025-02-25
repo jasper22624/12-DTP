@@ -15,12 +15,14 @@ while True:
     z = 0
     score = 0
     threes = False
+    card = 0
 # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
     sum = 0
     y1.extend(yp)
     y.append(y1)
     for i in y:
         i.sort()
+        print(i)
         if len(i) != 7:
             print("wrong amount")
             exit()
@@ -31,6 +33,7 @@ while True:
                     for e in range(2, 15):
                         if i.count(e) > 3:
                             threes = True
+                            card = e
                 else:
                     print("wrong input")
                     exit()
@@ -54,6 +57,7 @@ while True:
                         if t != e:
                             if i.count(t) > 1:
                                 threes = True
+                                card = e + t * 0.01
         if threes is True:
             print("there is a full house in here")
             score += 6
@@ -66,7 +70,6 @@ while True:
             for i in y:
                 i.sort()
                 i.reverse()
-                print(i)
                 for ii in i:
                     try:
                         ii = int(ii)
@@ -80,6 +83,7 @@ while True:
                         z = ii
                         if T >= 4:
                             Straight = True
+                            card = z
                     except ValueError:
                         print("wrong")
                         exit()
@@ -97,6 +101,7 @@ while True:
                     for e in range(2, 15):
                         if i.count(e) > 2:
                             threes = True
+                            card = e
                 if threes is True:
                     print("there is a three of a kind in here")
                     score += 3
@@ -116,6 +121,7 @@ while True:
                                     if z != 0:
                                         if ii == z:
                                             pair = pair + 1
+                                            card = ii
                                     z = ii
                                 else:
                                     print("wrong input")
@@ -130,17 +136,20 @@ while True:
                         else:
                             print("Biggest card")
                             score = 0
+                            card = i[0]
     three = 0
     z = 0
     score1 = 0
     y = []
     threes = False
+    card1 = 0
 # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
     sum = 0
     y2.extend(yp)
     y.append(y2)
     for i in y:
         i.sort()
+        print(i)
         if len(i) != 7:
             print("wrong amount")
             exit()
@@ -151,6 +160,7 @@ while True:
                     for e in range(2, 15):
                         if i.count(e) > 3:
                             threes = True
+                            card1 = e
                 else:
                     print("wrong input")
                     exit()
@@ -174,6 +184,7 @@ while True:
                         if t != e:
                             if i.count(t) > 1:
                                 threes = True
+                                card1 = e + t * 0.01
         if threes is True:
             print("there is a full house in here")
             score1 += 6
@@ -186,7 +197,6 @@ while True:
             for i in y:
                 i.sort()
                 i.reverse()
-                print(i)
                 for ii in i:
                     try:
                         ii = int(ii)
@@ -200,6 +210,7 @@ while True:
                         z = ii
                         if T >= 4:
                             Straight = True
+                            card1 = z
                     except ValueError:
                         print("wrong")
                         exit()
@@ -217,6 +228,7 @@ while True:
                     for e in range(2, 15):
                         if i.count(e) > 2:
                             threes = True
+                            card1 = e
                 if threes is True:
                     print("there is a three of a kind in here")
                     score1 += 3
@@ -236,6 +248,7 @@ while True:
                                     if z != 0:
                                         if ii == z:
                                             pair = pair + 1
+                                            card1 = ii
                                     z = ii
                                 else:
                                     print("wrong input")
@@ -250,11 +263,17 @@ while True:
                         else:
                             print("Biggest card")
                             score1 = 0
+                            card1 = i[0]
     if score > score1:
         print("player1 wins")
     elif score1 > score:
         print("player2 wins")
     else:
-        print("it's a draw")
+        if card > card1:
+            print("player1 wins")
+        elif card1 > card:
+            print("player2 wins")
+        else:
+            print("it's a draw")
     time.sleep(10)
     print("\n")
