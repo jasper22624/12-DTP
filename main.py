@@ -94,8 +94,36 @@ while True:
                     threes = True
                     card = y[0][0]
             if threes is True:
-                print("there is a flush in here")
-                score += 5
+                z = 0
+                T = 0
+                ee = 0
+                Straight = False
+                for i in y:
+                    i.sort()
+                    i.reverse()
+                    for ii in i:
+                        try:
+                            ii = int(ii)
+                            if z != 0:
+                                if ii-z == -1:
+                                    T = T+1
+                                elif ii-z == 0:
+                                    T = T
+                                else:
+                                    T = 0
+                            z = ii
+                            if T >= 4:
+                                Straight = True
+                                card = z
+                        except ValueError:
+                            print("wrong")
+                            exit()
+                if Straight is True:
+                    print("it's a straight flush")
+                    score += 10
+                else:
+                    print("there is a flush in here")
+                    score += 5
             else:
                 z = 0
                 T = 0
@@ -164,7 +192,7 @@ while True:
                                 print("Biggest card")
                                 score = 0
                                 i.sort()
-                                card = i[0]
+                                card = y[0][0]
     three = 0
     z = 0
     score1 = 0
@@ -230,8 +258,36 @@ while True:
                     threes = True
                     card1 = y[0][0]
             if threes is True:
-                print("there is a flush in here")
-                score1 += 5
+                z = 0
+                T = 0
+                ee = 0
+                Straight = False
+                for i in y:
+                    i.sort()
+                    i.reverse()
+                    for ii in i:
+                        try:
+                            ii = int(ii)
+                            if z != 0:
+                                if ii-z == -1:
+                                    T = T+1
+                                elif ii-z == 0:
+                                    T = T
+                                else:
+                                    T = 0
+                            z = ii
+                            if T >= 4:
+                                Straight = True
+                                card1 = z
+                        except ValueError:
+                            print("wrong")
+                            exit()
+                if Straight is True:
+                    print("it's a straight flush")
+                    score1 += 10
+                else:
+                    print("there is a flush in here")
+                    score1 += 5
             else:
                 z = 0
                 T = 0
@@ -300,7 +356,7 @@ while True:
                                 print("Biggest card")
                                 score1 = 0
                                 i.sort()
-                                card1 = i[0]
+                                card1 = y[0][0]
     if score > score1:
         print("player1 wins")
     elif score1 > score:
