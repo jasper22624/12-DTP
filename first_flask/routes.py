@@ -15,13 +15,13 @@ def pet_rocks(id):
     return render_template("pet_rocks.html", id=id)
 
 
-@app.route("/all_pizzas")
+@app.route("/all_pizza")
 def all_pizzas():
     cursor = sqlite3.connect('pizza.db').cursor()
     cursor.execute('select * from Pizza')
     pizzas = cursor.fetchall()
     sqlite3.connect('pizza.db').close()
-    return render_template("all_pizzas.html", pizzas=pizzas)
+    return render_template("all_pizza.html", pizzas=pizzas)
 
 
 if __name__ == "__main__":
