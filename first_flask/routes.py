@@ -17,10 +17,10 @@ def pet_rocks(id):
 
 @app.route("/all_pizza")
 def all_pizzas():
-    cursor = sqlite3.connect('pizza.db').cursor()
-    cursor.execute('select * from Pizza')
+    cursor = sqlite3.connect('first_flask/pizza.db').cursor()
+    cursor.execute('select * from Pizza order by id')
     pizzas = cursor.fetchall()
-    sqlite3.connect('pizza.db').close()
+    sqlite3.connect('first_flask/pizza.db').close()
     return render_template("all_pizza.html", pizzas=pizzas)
 
 
