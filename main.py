@@ -2,6 +2,8 @@ import random
 import sqlite3
 import time
 while True:
+    p = []
+    p1 = []
     y = []
     y1 = []
     y1c = []
@@ -11,27 +13,33 @@ while True:
     ypc = []
     for i in range(1, 3):
         cursor = sqlite3.connect('data.db').cursor()
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
+        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
         cards = cursor.fetchall()
         sqlite3.connect('data.db').close()
         y1.append(cards[0][2])
         y1c.append(cards[0][1])
+        p.append(cards[0][3])
     for i in range(1, 3):
         cursor = sqlite3.connect('data.db').cursor()
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
+        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
         cards = cursor.fetchall()
         sqlite3.connect('data.db').close()
         y2.append(cards[0][2])
         y2c.append(cards[0][1])
+        p1.append(cards[0][3])
     for i in range(1, 6):
         cursor = sqlite3.connect('data.db').cursor()
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
+        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
         cards = cursor.fetchall()
         sqlite3.connect('data.db').close()
         yp.append(cards[0][2])
         ypc.append(cards[0][1])
+        p.append(cards[0][3])
+        p1.append(cards[0][3])
     three = 0
     z = 0
+    p.sort()
+    p1.sort()
     score = 0
     threes = False
     card = 0
@@ -42,7 +50,7 @@ while True:
     y.append(y1)
     for i in y:
         i.sort()
-        print(i)
+        print(p)
         if len(i) != 7:
             print("wrong amount")
             exit()
@@ -88,7 +96,6 @@ while True:
             sum = 0
             threes = False
             y1c.sort()
-            print(f"colour: {y1c}")
             for h in range(1, 5):
                 if y1c.count(h) > 4:
                     threes = True
@@ -206,7 +213,7 @@ while True:
     y.append(y2)
     for i in y:
         i.sort()
-        print(i)
+        print(p1)
         if len(i) != 7:
             print("wrong amount")
             exit()
@@ -252,7 +259,6 @@ while True:
             sum = 0
             threes = False
             y2c.sort()
-            print(f"colour: {y2c}")
             for h in range(1, 5):
                 if y2c.count(h) > 4:
                     threes = True
