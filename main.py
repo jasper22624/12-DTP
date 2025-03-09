@@ -1,7 +1,9 @@
 import random
 import sqlite3
-import time
+money = 2000
 while True:
+    print(f"your current money: ${money}")
+    input("enter to continue")
     p = []
     p1 = []
     y = []
@@ -19,6 +21,8 @@ while True:
         y1.append(cards[0][2])
         y1c.append(cards[0][1])
         p.append(cards[0][3])
+        print(cards[0][3])
+    input()
     for i in range(1, 3):
         cursor = sqlite3.connect('data.db').cursor()
         cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
@@ -28,6 +32,8 @@ while True:
         y2c.append(cards[0][1])
         p1.append(cards[0][3])
     for i in range(1, 6):
+        if i >= 4:
+            input()
         cursor = sqlite3.connect('data.db').cursor()
         cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
         cards = cursor.fetchall()
@@ -36,10 +42,10 @@ while True:
         ypc.append(cards[0][1])
         p.append(cards[0][3])
         p1.append(cards[0][3])
+        print(cards[0][3])
+    input()
     three = 0
     z = 0
-    p.sort()
-    p1.sort()
     score = 0
     threes = False
     card = 0
@@ -50,6 +56,7 @@ while True:
     y.append(y1)
     for i in y:
         i.sort()
+        p.sort()
         print(p)
         if len(i) != 7:
             print("wrong amount")
@@ -213,6 +220,7 @@ while True:
     y.append(y2)
     for i in y:
         i.sort()
+        p1.sort()
         print(p1)
         if len(i) != 7:
             print("wrong amount")
@@ -364,15 +372,19 @@ while True:
                                 i.sort()
                                 card1 = y[0][0]
     if score > score1:
-        print("player1 wins")
+        print("you won")
+        money = money * 2
     elif score1 > score:
-        print("player2 wins")
+        print("you lose")
+        money = money / 2
     else:
         if card > card1:
-            print("player1 wins")
+            print("you won")
+            money = money * 2
         elif card1 > card:
-            print("player2 wins")
+            print("you lose")
+            money = money / 2
         else:
             print("it's a draw")
-    time.sleep(10)
+    input("enter to continue")
     print("\n")
