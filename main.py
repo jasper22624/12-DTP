@@ -2,48 +2,71 @@ import random
 import sqlite3
 money = 2000
 while True:
-    print(f"your current money: ${money}")
+    money = money - 50
+    print(f"your current money: ${money}, $50 paid for table fee")
     input("enter to continue")
     p = []
     p1 = []
     y = []
+    f = False
     y1 = []
     y1c = []
+    ran = 0
+    select = []
     y2 = []
     y2c = []
     yp = []
     ypc = []
     for i in range(1, 3):
         cursor = sqlite3.connect('data.db').cursor()
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
+        ran = random.randint(1, 52)
+        while select.count(ran) >= 1:
+            ran = random.randint(1, 52)
+        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {ran} order by Card.id')
         cards = cursor.fetchall()
         sqlite3.connect('data.db').close()
+        select.append(cards[0][0])
         y1.append(cards[0][2])
         y1c.append(cards[0][1])
         p.append(cards[0][3])
         print(cards[0][3])
-    input()
+    if input("enter to continue, 'f' + enter to fold, $10 paid for table fee\n") == 'f':
+        continue
+    money = money - 10
     for i in range(1, 3):
         cursor = sqlite3.connect('data.db').cursor()
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
+        ran = random.randint(1, 52)
+        while select.count(ran) >= 1:
+            ran = random.randint(1, 52)
+        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {ran} order by Card.id')
         cards = cursor.fetchall()
         sqlite3.connect('data.db').close()
+        select.append(cards[0][0])
         y2.append(cards[0][2])
         y2c.append(cards[0][1])
         p1.append(cards[0][3])
     for i in range(1, 6):
         if i >= 4:
-            input()
+            if input("enter to continue, 'f' + enter to fold, $10 paid for table fee\n") == 'f':
+                f = True
+                break
+            money = money - 10
         cursor = sqlite3.connect('data.db').cursor()
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {random.randint(1, 52)} order by Card.id')
+        ran = random.randint(1, 52)
+        while select.count(ran) >= 1:
+            ran = random.randint(1, 52)
+        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {ran} order by Card.id')
         cards = cursor.fetchall()
         sqlite3.connect('data.db').close()
+        select.append(cards[0][0])
         yp.append(cards[0][2])
         ypc.append(cards[0][1])
         p.append(cards[0][3])
         p1.append(cards[0][3])
         print(cards[0][3])
-    input()
+    if f == True:
+        continue
+    input("enter to continue")
     three = 0
     z = 0
     score = 0
@@ -373,18 +396,19 @@ while True:
                                 card1 = y[0][0]
     if score > score1:
         print("you won")
-        money = money * 2
+        money += 180
     elif score1 > score:
         print("you lose")
-        money = money / 2
+        money -= 20
     else:
         if card > card1:
             print("you won")
-            money = money * 2
+            money += 180
         elif card1 > card:
             print("you lose")
-            money = money / 2
+            money -= 20
         else:
             print("it's a draw")
+            money += 80
     input("enter to continue")
     print("\n")
