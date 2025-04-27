@@ -4,7 +4,7 @@ money = 2000
 while True:
     money = money - 50
     print(f"your current money: ${money}, $50 paid for table fee")
-    input("enter to continue")
+    input("press enter to continue")
     p = []
     p1 = []
     y = []
@@ -30,7 +30,7 @@ while True:
         y1c.append(cards[0][1])
         p.append(cards[0][3])
         print(cards[0][3])
-    if input("enter to continue, 'f' + enter to fold, $10 paid for table fee\n") == 'f':
+    if input("press enter to continue, 'f' + enter to fold, $10 paid for table fee\n") == 'f':
         continue
     money = money - 10
     for i in range(1, 3):
@@ -47,7 +47,7 @@ while True:
         p1.append(cards[0][3])
     for i in range(1, 6):
         if i >= 4:
-            if input("enter to continue, 'f' + enter to fold, $10 paid for table fee\n") == 'f':
+            if input("press enter to continue, 'f' + enter to fold, $10 paid for table fee\n") == 'f':
                 f = True
                 break
             money = money - 10
@@ -66,7 +66,7 @@ while True:
         print(cards[0][3])
     if f == True:
         continue
-    input("enter to continue")
+    input("press enter to see results")
     three = 0
     z = 0
     score = 0
@@ -76,7 +76,7 @@ while True:
     sum = 0
     y1.extend(yp)
     y1c.extend(ypc)
-    y.append(y1)
+    y.append(f"your card {y1}")
     for i in y:
         i.sort()
         p.sort()
@@ -244,7 +244,7 @@ while True:
     for i in y:
         i.sort()
         p1.sort()
-        print(p1)
+        print(f"Bot 1's card {p1}")
         if len(i) != 7:
             print("wrong amount")
             exit()
@@ -410,5 +410,5 @@ while True:
         else:
             print("it's a draw")
             money += 80
-    input("enter to continue")
+    input("press enter to have another game")
     print("\n")
