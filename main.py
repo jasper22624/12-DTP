@@ -76,11 +76,11 @@ while True:
     sum = 0
     y1.extend(yp)
     y1c.extend(ypc)
-    y.append(f"your card {y1}")
+    y.append(y1)
     for i in y:
         i.sort()
         p.sort()
-        print(p)
+        print(f"your card: {p}")
         if len(i) != 7:
             print("wrong amount")
             exit()
