@@ -2,6 +2,9 @@
 {% block content %}
 <p>This is the playing page</p>
 <hr>
+{% for card in cards %}
+<p>{{card[0][3]}}</p>
+{% endfor %}
 <a href="home">
     <h2>click to exit</h2>
 </a>
