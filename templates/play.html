@@ -2,9 +2,67 @@
 {% block content %}
 <p>This is the playing page</p>
 <hr>
+
+<p>Your hand cards</p>
+
 {% for card in cards %}
 <p>{{card[0][3]}}</p>
+<hr>
 {% endfor %}
+
+<p>The Public Cards</p>
+
+<button id="showBtn">Show Info</button>
+
+<div id="hiddenContent" style="display: none;">
+  {{cardsp[0][0][3]}}
+  <hr>
+  {{cardsp[1][0][3]}}
+  <hr>
+  {{cardsp[2][0][3]}}
+  <hr>
+    <button id="showBtn3">Show Info</button>
+
+    <div id="hiddenContent3" style="display: none;">
+        {{cardsp[3][0][3]}}
+        <hr>
+        <button id="showBtn4">Show Info</button>
+
+        <div id="hiddenContent4" style="display: none;">
+            {{cardsp[4][0][3]}}
+        </div>
+
+        <script>
+        document.getElementById('showBtn4').onclick = function() {
+            const content = document.getElementById('hiddenContent4');
+            content.style.display = 'block'; // Show the hidden content
+            this.style.display = 'none';     // Hide the button itself
+        }
+        </script>
+    </div>
+
+    <script>
+    document.getElementById('showBtn3').onclick = function() {
+        const content = document.getElementById('hiddenContent3');
+        content.style.display = 'block'; // Show the hidden content
+        this.style.display = 'none';     // Hide the button itself
+    }
+    </script>
+    <hr>
+
+
+</div>
+
+<script>
+  document.getElementById('showBtn').onclick = function() {
+    const content = document.getElementById('hiddenContent');
+    content.style.display = 'block'; // Show the hidden content
+    this.style.display = 'none';     // Hide the button itself
+  }
+</script>
+<hr>
+
+
 <a href="home">
     <h2>click to exit</h2>
 </a>

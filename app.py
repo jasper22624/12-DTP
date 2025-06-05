@@ -26,6 +26,7 @@ def play():
     cardss=[]
     cardss1=[]
     cardssp=[]
+    select=[]
         #player's\/
     for i in range(1,3):
         cursor = sqlite3.connect('data.db').cursor()
@@ -60,7 +61,7 @@ def play():
         cardssp.append(cards)
         sqlite3.connect('data.db').close()
         
-    return render_template("play.html", title="play", cards=cardss)
+    return render_template("play.html", title="play", cards=cardss, cardsp=cardssp)
 
 
 if __name__ == "__main__":
