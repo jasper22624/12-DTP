@@ -30,7 +30,38 @@
 
         <div id="hiddenContent4" style="display: none;">
             {{cardsp[4][0][3]}}
-        </div>
+            <hr>
+            <button id="showBtn5">Show Info</button>
+
+            <div id="hiddenContent5" style="display: none;">
+                <p>{{won}}</p>
+                <hr>
+                <button id="showBtn6">Show Info</button>
+
+                <div id="hiddenContent6" style="display: none;">
+                    <p>bot1's cards</p>
+                    <p>{{cards1[0][0][3]}}</p>
+                    <p>{{cards1[1][0][3]}}</p>
+                </div>
+
+                <script>
+                document.getElementById('showBtn6').onclick = function() {
+                    const content = document.getElementById('hiddenContent6');
+                    content.style.display = 'block'; // Show the hidden content
+                    this.style.display = 'none';     // Hide the button itself
+                }
+                </script>
+                </div>
+            </div>
+
+            <script>
+            document.getElementById('showBtn5').onclick = function() {
+                const content = document.getElementById('hiddenContent5');
+                content.style.display = 'block'; // Show the hidden content
+                this.style.display = 'none';     // Hide the button itself
+            }
+            </script>
+            </div>
 
         <script>
         document.getElementById('showBtn4').onclick = function() {
