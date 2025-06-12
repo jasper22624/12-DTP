@@ -67,13 +67,11 @@ while True:
     if f == True:
         continue
     input("press enter to see results")
-    three = 0
     z = 0
     score = 0
     threes = False
     card = 0
 # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
-    sum = 0
     y1.extend(yp)
     y1c.extend(ypc)
     y.append(y1)
@@ -103,9 +101,7 @@ while True:
         score += 7
         # the code above is checking the 4 of a kind
     else:
-        three = 0
         z = 0
-        sum = 0
         threes = False
         for i in y:
             i.sort()
@@ -121,9 +117,7 @@ while True:
             score += 6
             # the code above is checking full house
         else:
-            three = 0
             z = 0
-            sum = 0
             threes = False
             y1c.sort()
             for h in range(1, 5):
@@ -191,9 +185,7 @@ while True:
                     score += 4
                     # the code above is checking the Straight
                 else:
-                    three = 0
                     z = 0
-                    sum = 0
                     threes = False
                     for i in y:
                         i.sort()
@@ -230,14 +222,12 @@ while True:
                                 score = 0
                                 i.sort()
                                 card = y[0][0]
-    three = 0
     z = 0
     score1 = 0
     y = []
     threes = False
     card1 = 0
 # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
-    sum = 0
     y2.extend(yp)
     y2c.extend(ypc)
     y.append(y2)
@@ -267,9 +257,7 @@ while True:
         score1 += 7
         # the code above is checking the 4 of a kind
     else:
-        three = 0
         z = 0
-        sum = 0
         threes = False
         for i in y:
             i.sort()
@@ -285,9 +273,7 @@ while True:
             score1 += 6
             # the code above is checking full house
         else:
-            three = 0
             z = 0
-            sum = 0
             threes = False
             y2c.sort()
             for h in range(1, 5):
@@ -355,9 +341,7 @@ while True:
                     score1 += 4
                     # the code above is checking the Straight
                 else:
-                    three = 0
                     z = 0
-                    sum = 0
                     threes = False
                     for i in y:
                         i.sort()

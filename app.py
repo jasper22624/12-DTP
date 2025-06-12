@@ -4,6 +4,8 @@ import random
 select = []
 ran = 0
 cardss = []
+money = 2000
+money1 = money
 cardss1=[]
 cardssp=[]
 
@@ -22,7 +24,7 @@ def home():
 
 
 @app.route("/play")
-def play():
+def play(money = money):
     cardss=[]
     cardss1=[]
     cardssp=[]
@@ -39,7 +41,7 @@ def play():
     y2c = []
     yp = []
     ypc = []
-    money = 2000
+    money1 = money
     won = "none"
         #player's\/
     for i in range(1,3):
@@ -86,13 +88,11 @@ def play():
         sqlite3.connect('data.db').close()
 
 
-    three = 0
     z = 0
     score = 0
     threes = False
     card = 0
 # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
-    sum = 0
     y1.extend(yp)
     y1c.extend(ypc)
     y.append(y1)
@@ -122,9 +122,7 @@ def play():
         score += 7
         # the code above is checking the 4 of a kind
     else:
-        three = 0
         z = 0
-        sum = 0
         threes = False
         for i in y:
             i.sort()
@@ -140,9 +138,7 @@ def play():
             score += 6
             # the code above is checking full house
         else:
-            three = 0
             z = 0
-            sum = 0
             threes = False
             y1c.sort()
             for h in range(1, 5):
@@ -210,9 +206,7 @@ def play():
                     score += 4
                     # the code above is checking the Straight
                 else:
-                    three = 0
                     z = 0
-                    sum = 0
                     threes = False
                     for i in y:
                         i.sort()
@@ -249,14 +243,12 @@ def play():
                                 score = 0
                                 i.sort()
                                 card = y[0][0]
-    three = 0
     z = 0
     score1 = 0
     y = []
     threes = False
     card1 = 0
 # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
-    sum = 0
     y2.extend(yp)
     y2c.extend(ypc)
     y.append(y2)
@@ -286,9 +278,7 @@ def play():
         score1 += 7
         # the code above is checking the 4 of a kind
     else:
-        three = 0
         z = 0
-        sum = 0
         threes = False
         for i in y:
             i.sort()
@@ -304,9 +294,7 @@ def play():
             score1 += 6
             # the code above is checking full house
         else:
-            three = 0
             z = 0
-            sum = 0
             threes = False
             y2c.sort()
             for h in range(1, 5):
@@ -374,9 +362,7 @@ def play():
                     score1 += 4
                     # the code above is checking the Straight
                 else:
-                    three = 0
                     z = 0
-                    sum = 0
                     threes = False
                     for i in y:
                         i.sort()
@@ -415,24 +401,24 @@ def play():
                                 card1 = y[0][0]
     if score > score1:
         won = "you won!"
-        money += 180
+        money += 200
     elif score1 > score:
         won = "you lost!"
-        money -= 20
+        money -= 200
     else:
         if card > card1:
             won = "you won!"
-            money += 180
+            money += 200
         elif card1 > card:
             won = "you lost!"
-            money -= 20
+            money -= 200
         else:
             won = "it's a draw!"
-            money += 80
+            money += 0
     print("\n")
 
         
-    return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, won=won)
+    return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, won=won, money=money, money1=money1)
 
 
 if __name__ == "__main__":

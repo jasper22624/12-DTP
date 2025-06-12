@@ -42,6 +42,21 @@
                     <p>bot1's cards</p>
                     <p>{{cards1[0][0][3]}}</p>
                     <p>{{cards1[1][0][3]}}</p>
+                    <hr>
+                    <button id="showBtn7">Your current money: {{money1}}</button>
+
+                    <div id="hiddenContent7" style="display: none;">
+                        <p> Your current money: {{money}}</p>
+                    </div>
+
+                    <script>
+                    document.getElementById('showBtn7').onclick = function() {
+                        const content = document.getElementById('hiddenContent7');
+                        content.style.display = 'block'; // Show the hidden content
+                        this.style.display = 'none';     // Hide the button itself
+                    }
+                    </script>
+                    </div>
                 </div>
 
                 <script>
@@ -92,6 +107,7 @@
   }
 </script>
 <hr>
+
 
 
 <a href="home">
