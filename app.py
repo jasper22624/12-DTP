@@ -141,10 +141,14 @@ def play(money = money):
             z = 0
             threes = False
             y1c.sort()
+            y1c.reverse()
             for h in range(1, 5):
                 if y1c.count(h) > 4:
-                    threes = True
-                    card = y[0][0]
+                    for w in range(0, 5):
+                        threes = True
+                        card = y[0][w]
+                        if y1c[w] != h:
+                            continue
             if threes is True:
                 z = 0
                 T = 0
@@ -198,6 +202,7 @@ def play(money = money):
                             if T >= 4:
                                 Straight = True
                                 card = z
+                                break
                         except ValueError:
                             print("wrong")
                             exit()
@@ -231,7 +236,10 @@ def play(money = money):
                                 if z != 0:
                                     if ii == z:
                                         pair = pair + 1
-                                        card = ii
+                                        if card == 0:
+                                            card = ii
+                                        else:
+                                            card += ii * 3
                                 z = ii
                             if pair > 2:
                                 pair = 2
@@ -242,7 +250,7 @@ def play(money = money):
                                 print("Biggest card")
                                 score = 0
                                 i.sort()
-                                card = y[0][0]
+                                card = y[0][6]
     z = 0
     score1 = 0
     y = []
@@ -252,6 +260,7 @@ def play(money = money):
     y2.extend(yp)
     y2c.extend(ypc)
     y.append(y2)
+    y.sort()
     for i in y:
         i.sort()
         p1.sort()
@@ -297,10 +306,14 @@ def play(money = money):
             z = 0
             threes = False
             y2c.sort()
+            y2c.reverse()
             for h in range(1, 5):
                 if y2c.count(h) > 4:
-                    threes = True
-                    card1 = y[0][0]
+                    for w in range(0, 5):
+                        threes = True
+                        card1 = y[0][w]
+                        if y2c[w] != h:
+                            continue
             if threes is True:
                 z = 0
                 T = 0
@@ -354,6 +367,7 @@ def play(money = money):
                             if T >= 4:
                                 Straight = True
                                 card1 = z
+                                break
                         except ValueError:
                             print("wrong")
                             exit()
@@ -387,7 +401,10 @@ def play(money = money):
                                 if z != 0:
                                     if ii == z:
                                         pair = pair + 1
-                                        card1 = ii
+                                        if card1 == 0:
+                                            card1 = ii
+                                        else:
+                                            card1 += ii * 3
                                 z = ii
                             if pair > 2:
                                 pair = 2
@@ -398,7 +415,9 @@ def play(money = money):
                                 print("Biggest card")
                                 score1 = 0
                                 i.sort()
-                                card1 = y[0][0]
+                                card1 = y[0][6]
+    print(card)
+    print(card1)
     if score > score1:
         won = "you won!"
         money += 200

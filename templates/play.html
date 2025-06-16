@@ -12,7 +12,7 @@
 
 <p>The Public Cards</p>
 
-<button id="showBtn">Show Info</button>
+<button id="showBtn">Check</button>
 
 <div id="hiddenContent" style="display: none;">
   {{cardsp[0][0][3]}}
@@ -21,29 +21,29 @@
   <hr>
   {{cardsp[2][0][3]}}
   <hr>
-    <button id="showBtn3">Show Info</button>
+    <button id="showBtn3">Check</button>
 
     <div id="hiddenContent3" style="display: none;">
         {{cardsp[3][0][3]}}
         <hr>
-        <button id="showBtn4">Show Info</button>
+        <button id="showBtn4">Check</button>
 
         <div id="hiddenContent4" style="display: none;">
             {{cardsp[4][0][3]}}
             <hr>
-            <button id="showBtn5">Show Info</button>
+            <button id="showBtn5">Results</button>
 
             <div id="hiddenContent5" style="display: none;">
                 <p>{{won}}</p>
                 <hr>
-                <button id="showBtn6">Show Info</button>
+                <button id="showBtn6">Opponent's Card</button>
 
                 <div id="hiddenContent6" style="display: none;">
                     <p>bot1's cards</p>
                     <p>{{cards1[0][0][3]}}</p>
                     <p>{{cards1[1][0][3]}}</p>
                     <hr>
-                    <button id="showBtn7">Your current money: {{money1}}</button>
+                    <button id="showBtn7">Your money: {{money1}}</button>
 
                     <div id="hiddenContent7" style="display: none;">
                         <p> Your current money: {{money}}</p>
@@ -112,5 +112,10 @@
 
 <a href="home">
     <h2>click to exit</h2>
+</a>
+
+
+<a href="play">
+    <h2>click to play another game</h2>
 </a>
 {% endblock %}
