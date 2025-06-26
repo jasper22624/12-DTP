@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 import sqlite3
 import random
+
+
 select = []
 ran = 0
 cardss = []
@@ -9,15 +11,17 @@ money1 = money
 cardss1=[]
 cardssp=[]
 
-
+#The following code is for creating a table called 'Money'
+#This is for storage of varible - money
 conn = sqlite3.connect('data.db')
 cursor = conn.cursor()
 
+#if the data.db is intialized, we need to add table
 cursor.execute("CREATE TABLE IF NOT EXISTS Money (id INTEGER PRIMARY KEY, money INTEGER)")
 conn.commit()
 
 cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
-if cursor.rowcount == 0:
+if cursor.rowcount == 0: #if the data.db is intialized, we need to add data
     cursor.execute("INSERT INTO Money (id, money) VALUES (?, ?)", (1, money))
 conn.commit()
 
@@ -55,6 +59,9 @@ def play():
     y2c = []
     yp = []
     ypc = []
+    won = "none"
+
+    #the following code is for extract data from table - "Money"
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
     cursor.execute("select Money.money from Money where id=1")
@@ -62,8 +69,9 @@ def play():
     money = moneyl[0][0]
     conn.close()
     money1 = money
-    won = "none"
-        #player's\/
+
+
+        #player's cards extraction
     for i in range(1,3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
@@ -78,7 +86,9 @@ def play():
         y1c.append(cards[0][1])
         p.append(cards[0][3])
         conn.close()
-        #bot's\/
+
+
+        #bot's cards extraction
     for i in range(1,3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
@@ -93,7 +103,9 @@ def play():
         y2c.append(cards[0][1])
         p1.append(cards[0][3])
         conn.close()
-        #public cards\/
+
+
+        #public cards cards extraction
     for i in range(1,6):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
@@ -111,11 +123,12 @@ def play():
         conn.close()
 
 
+    #The following code is for assess the cards of player
     z = 0
     score = 0
     threes = False
     card = 0
-# y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
+    # y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
     y1.extend(yp)
     y1c.extend(ypc)
     y.append(y1)
@@ -203,6 +216,9 @@ def play():
                 else:
                     print("there is a flush in here")
                     score += 5
+            # the code above is checking flush and stright flush
+            # because the 7 cards can not form full house and flush at once
+            # the assess of stright flush can go after the full house
             else:
                 z = 0
                 T = 0
@@ -271,6 +287,10 @@ def play():
                                 score = 0
                                 i.sort()
                                 card = y[0][6]
+                            # the code above is checking pairs and Big card
+
+
+    #The following code is for assess the cards of CPU
     z = 0
     score1 = 0
     y = []
@@ -365,6 +385,9 @@ def play():
                 else:
                     print("there is a flush in here")
                     score1 += 5
+            # the code above is checking flush and stright flush
+            # because the 7 cards can not form full house and flush at once
+            # the assess of stright flush can go after the full house
             else:
                 z = 0
                 T = 0
@@ -433,6 +456,10 @@ def play():
                                 score1 = 0
                                 i.sort()
                                 card1 = y[0][6]
+                            # the code above is checking pairs and Big card
+
+
+    # the following code is for compare the cards
     print(card)
     print(card1)
     if score > score1:
@@ -453,6 +480,8 @@ def play():
             money += 0
     print("\n")
 
+
+    # after update money, we need to update to the data.db
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
     cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))

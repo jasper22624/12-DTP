@@ -3,60 +3,51 @@
 <p>This is the playing page</p>
 <hr>
 
-<p>Your hand cards</p>
+<div class="player" style="position: absolute;bottom: 10%;left: 40%;transform: rotate(-10deg);">
+    <p>{{cards[0][0][3]}}</p>
+</div>
 
-{% for card in cards %}
-<p>{{card[0][3]}}</p>
-<hr>
-{% endfor %}
+<div class="player" style="position: absolute;bottom: 10%;left: 50%;transform: rotate(10deg);">
+    <p>{{cards[1][0][3]}}</p>
+</div>
 
-<p>The Public Cards</p>
-
-<button id="showBtn">Check</button>
+<button class="check" id="showBtn">Check</button>
 
 <div id="hiddenContent" style="display: none;">
-  {{cardsp[0][0][3]}}
-  <hr>
-  {{cardsp[1][0][3]}}
-  <hr>
-  {{cardsp[2][0][3]}}
-  <hr>
-    <button id="showBtn3">Check</button>
+  <div id="hiddenContent0" style="position: absolute;bottom: 50%;left: 35%;">
+    {{cardsp[0][0][3]}}
+  </div>
+  <div id="hiddenContent1" style="position: absolute;bottom: 50%;left: 40%;">
+    {{cardsp[1][0][3]}}
+  </div>
+  <div id="hiddenContent2" style="position: absolute;bottom: 50%;left: 45%;">
+    {{cardsp[2][0][3]}}
+  </div>
+    <button class="check" id="showBtn3">Check</button>
 
     <div id="hiddenContent3" style="display: none;">
-        {{cardsp[3][0][3]}}
-        <hr>
-        <button id="showBtn4">Check</button>
+        <div id="hiddenContent22" style="position: absolute;bottom: 50%;left: 50%;">
+            {{cardsp[3][0][3]}}
+        </div>
+        <button class="check" id="showBtn4">Check</button>
 
         <div id="hiddenContent4" style="display: none;">
-            {{cardsp[4][0][3]}}
-            <hr>
-            <button id="showBtn5">Results</button>
+            <div id="hiddenContent32" style="position: absolute;bottom: 50%;left: 55%;">
+                {{cardsp[4][0][3]}}
+            </div>
+            <button class="check" id="showBtn5">Results</button>
 
             <div id="hiddenContent5" style="display: none;">
-                <p>{{won}}</p>
-                <hr>
-                <button id="showBtn6">Opponent's Card</button>
+                <div id="hiddenContent42" style="position: absolute;bottom: 30%;left: 33%;font-size: 32px;">    
+                    {{won}}
+                    Your current money: {{money}}
+                </div>
+                <button class="check" id="showBtn6">Opponent's Card</button>
 
                 <div id="hiddenContent6" style="display: none;">
                     <p>bot1's cards</p>
                     <p>{{cards1[0][0][3]}}</p>
                     <p>{{cards1[1][0][3]}}</p>
-                    <hr>
-                    <button id="showBtn7">Your money: {{money1}}</button>
-
-                    <div id="hiddenContent7" style="display: none;">
-                        <p> Your current money: {{money}}</p>
-                    </div>
-
-                    <script>
-                    document.getElementById('showBtn7').onclick = function() {
-                        const content = document.getElementById('hiddenContent7');
-                        content.style.display = 'block'; // Show the hidden content
-                        this.style.display = 'none';     // Hide the button itself
-                    }
-                    </script>
-                    </div>
                 </div>
 
                 <script>
@@ -94,7 +85,6 @@
         this.style.display = 'none';     // Hide the button itself
     }
     </script>
-    <hr>
 
 
 </div>
@@ -106,16 +96,15 @@
     this.style.display = 'none';     // Hide the button itself
   }
 </script>
-<hr>
 
 
 
-<a href="home">
+<a href="home" style="position: absolute;bottom: 10%;left: 85%;">
     <h2>click to exit</h2>
 </a>
 
 
-<a href="play">
+<a href="play" style="position: absolute;bottom: 5%;left: 75%;">
     <h2>click to play another game</h2>
 </a>
 {% endblock %}
