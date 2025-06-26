@@ -10,6 +10,20 @@ cardss1=[]
 cardssp=[]
 
 
+conn = sqlite3.connect('data.db')
+cursor = conn.cursor()
+
+cursor.execute("CREATE TABLE IF NOT EXISTS Money (id INTEGER PRIMARY KEY, money INTEGER)")
+conn.commit()
+
+cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
+if cursor.rowcount == 0:
+    cursor.execute("INSERT INTO Money (id, money) VALUES (?, ?)", (1, money))
+conn.commit()
+
+conn.close()
+
+
 app = Flask(__name__)
 
 
@@ -24,7 +38,7 @@ def home():
 
 
 @app.route("/play")
-def play(money = money):
+def play():
     cardss=[]
     cardss1=[]
     cardssp=[]
@@ -41,43 +55,52 @@ def play(money = money):
     y2c = []
     yp = []
     ypc = []
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    cursor.execute("select Money.money from Money where id=1")
+    moneyl = cursor.fetchall()
+    money = moneyl[0][0]
+    conn.close()
     money1 = money
     won = "none"
         #player's\/
     for i in range(1,3):
-        cursor = sqlite3.connect('data.db').cursor()
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
         ran = random.randint(1, 52)
         while select.count(ran) >= 1:
             ran = random.randint(1, 52)
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {ran} order by Card.id')
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
         cards = cursor.fetchall()
         select.append(cards[0][0])
         cardss.append(cards)
         y1.append(cards[0][2])
         y1c.append(cards[0][1])
         p.append(cards[0][3])
-        sqlite3.connect('data.db').close()
+        conn.close()
         #bot's\/
     for i in range(1,3):
-        cursor = sqlite3.connect('data.db').cursor()
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
         ran = random.randint(1, 52)
         while select.count(ran) >= 1:
             ran = random.randint(1, 52)
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {ran} order by Card.id')
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
         cards = cursor.fetchall()
         select.append(cards[0][0])
         cardss1.append(cards)
         y2.append(cards[0][2])
         y2c.append(cards[0][1])
         p1.append(cards[0][3])
-        sqlite3.connect('data.db').close()
+        conn.close()
         #public cards\/
     for i in range(1,6):
-        cursor = sqlite3.connect('data.db').cursor()
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
         ran = random.randint(1, 52)
         while select.count(ran) >= 1:
             ran = random.randint(1, 52)
-        cursor.execute(f'select Card.id,Colour.colours,Number.numbers,Card.name from Card join Colour on Card.colour = Colour.id join Number on Card.number = Number.id where Card.id = {ran} order by Card.id')
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
         cards = cursor.fetchall()
         select.append(cards[0][0])
         cardssp.append(cards)
@@ -85,7 +108,7 @@ def play(money = money):
         ypc.append(cards[0][1])
         p.append(cards[0][3])
         p1.append(cards[0][3])
-        sqlite3.connect('data.db').close()
+        conn.close()
 
 
     z = 0
@@ -228,9 +251,6 @@ def play(money = money):
                         z = 0
                         for i in y:
                             i.sort()
-                            if len(i) != 7:
-                                print("wrong amount")
-                                break
                             for ii in i:
                                 ii = int(ii)
                                 if z != 0:
@@ -393,9 +413,6 @@ def play(money = money):
                         z = 0
                         for i in y:
                             i.sort()
-                            if len(i) != 7:
-                                print("wrong amount")
-                                break
                             for ii in i:
                                 ii = int(ii)
                                 if z != 0:
@@ -435,6 +452,12 @@ def play(money = money):
             won = "it's a draw!"
             money += 0
     print("\n")
+
+    conn = sqlite3.connect('data.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
+    conn.commit()
+    conn.close()
 
         
     return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, won=won, money=money, money1=money1)
