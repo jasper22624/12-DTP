@@ -16,7 +16,7 @@
     cursor: pointer;
     transition: background-color 1.3s ease;
     position: fixed;
-    bottom: 200px;
+    bottom: 250px;
     left: 35%;
 }
 
@@ -31,3 +31,8 @@ button:hover {
     left: 45%;
 }
 
+
+img {
+    width: 150px;
+    height: auto;
+}

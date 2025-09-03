@@ -3,37 +3,37 @@
 <p>This is the playing page</p>
 <hr>
 
-<div class="player" style="position: absolute;bottom: 10%;left: 40%;transform: rotate(-10deg);">
-    <p>{{cards[0][0][3]}}</p>
+<div class="player" style="position: absolute;bottom: 0%;left: 40%;">
+    <img src="{{ url_for('static', filename=cards[0][0][4]) }}" alt="{{cards[0][0][3]}}">
 </div>
 
-<div class="player" style="position: absolute;bottom: 10%;left: 50%;transform: rotate(10deg);">
-    <p>{{cards[1][0][3]}}</p>
+<div class="player" style="position: absolute;bottom: 0%;left: 50%;">
+    <img src="{{ url_for('static', filename=cards[1][0][4]) }}" alt="{{cards[1][0][3]}}">
 </div>
 
 <button class="check" id="showBtn">Check</button>
 
 <div id="hiddenContent" style="display: none;">
-  <div id="hiddenContent0" style="position: absolute;bottom: 50%;left: 35%;">
-    {{cardsp[0][0][3]}}
+  <div id="hiddenContent0" style="position: fixed;bottom: 50%;left: 35%;">
+    <img src="{{ url_for('static', filename=cardsp[0][0][4]) }}" alt="{{cardsp[0][0][3]}}">
   </div>
-  <div id="hiddenContent1" style="position: absolute;bottom: 50%;left: 40%;">
-    {{cardsp[1][0][3]}}
+  <div id="hiddenContent1" style="position: fixed;bottom: 50%;left: 40%;">
+    <img src="{{ url_for('static', filename=cardsp[1][0][4]) }}" alt="{{cardsp[1][0][3]}}">
   </div>
-  <div id="hiddenContent2" style="position: absolute;bottom: 50%;left: 45%;">
-    {{cardsp[2][0][3]}}
+  <div id="hiddenContent2" style="position: fixed;bottom: 50%;left: 45%;">
+    <img src="{{ url_for('static', filename=cardsp[2][0][4]) }}" alt="{{cardsp[2][0][3]}}">
   </div>
     <button class="check" id="showBtn3">Check</button>
 
     <div id="hiddenContent3" style="display: none;">
-        <div id="hiddenContent22" style="position: absolute;bottom: 50%;left: 50%;">
-            {{cardsp[3][0][3]}}
+        <div id="hiddenContent22" style="position: fixed;bottom: 50%;left: 50%;">
+            <img src="{{ url_for('static', filename=cardsp[3][0][4]) }}" alt="{{cardsp[3][0][3]}}">
         </div>
         <button class="check" id="showBtn4">Check</button>
 
         <div id="hiddenContent4" style="display: none;">
-            <div id="hiddenContent32" style="position: absolute;bottom: 50%;left: 55%;">
-                {{cardsp[4][0][3]}}
+            <div id="hiddenContent32" style="position: fixed;bottom: 50%;left: 55%;">
+                <img src="{{ url_for('static', filename=cardsp[4][0][4]) }}" alt="{{cardsp[4][0][3]}}">
             </div>
             <button class="check" id="showBtn5">Results</button>
 
@@ -46,8 +46,8 @@
 
                 <div id="hiddenContent6" style="display: none;">
                     <p>bot1's cards</p>
-                    <p>{{cards1[0][0][3]}}</p>
-                    <p>{{cards1[1][0][3]}}</p>
+                    <img src="{{ url_for('static', filename=cards1[0][0][4]) }}" alt="{{cards1[0][0][3]}}">
+                    <img src="{{ url_for('static', filename=cards1[1][0][4]) }}" alt="{{cards1[1][0][3]}}">
                 </div>
 
                 <script>

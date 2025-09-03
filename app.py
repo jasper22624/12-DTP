@@ -78,10 +78,10 @@ def play():
         ran = random.randint(1, 52)
         while select.count(ran) >= 1:
             ran = random.randint(1, 52)
-        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name, Card.media FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
         cards = cursor.fetchall()
         select.append(cards[0][0])
-        cardss.append(cards)
+        cardss.append(cards)    
         y1.append(cards[0][2])
         y1c.append(cards[0][1])
         p.append(cards[0][3])
@@ -95,7 +95,7 @@ def play():
         ran = random.randint(1, 52)
         while select.count(ran) >= 1:
             ran = random.randint(1, 52)
-        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name, Card.media FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
         cards = cursor.fetchall()
         select.append(cards[0][0])
         cardss1.append(cards)
@@ -112,7 +112,7 @@ def play():
         ran = random.randint(1, 52)
         while select.count(ran) >= 1:
             ran = random.randint(1, 52)
-        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name, Card.media FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
         cards = cursor.fetchall()
         select.append(cards[0][0])
         cardssp.append(cards)
