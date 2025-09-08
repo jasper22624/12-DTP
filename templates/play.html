@@ -45,14 +45,31 @@
                 <button class="check" id="showBtn6">Opponent's Card</button>
 
                 <div id="hiddenContent6" style="display: none;">
-                    <p>bot1's cards</p>
-                    <img src="{{ url_for('static', filename=cards1[0][0][4]) }}" alt="{{cards1[0][0][3]}}">
-                    <img src="{{ url_for('static', filename=cards1[1][0][4]) }}" alt="{{cards1[1][0][3]}}">
+                    <div id="hiddenContent52" style="position: absolute;top: 30%;left: 10%;font-size: 32px;">    
+                        <p>bot1's cards</p>
+                        <img src="{{ url_for('static', filename=cards1[0][0][4]) }}" alt="{{cards1[0][0][3]}}">
+                        <img src="{{ url_for('static', filename=cards1[1][0][4]) }}" alt="{{cards1[1][0][3]}}">
+                    </div>
+                </div>
+
+                <div id="bot2Cards">
+                    <div id="hiddenContent62" style="position: absolute;top: 30%;right: 10%;font-size: 32px;">    
+                        <p>Bot 2's cards:</p>
+                        <img src="{{ url_for('static', filename=cards2[0][0][4]) }}" alt="{{cards2[0][0][3]}}">
+                        <img src="{{ url_for('static', filename=cards2[1][0][4]) }}" alt="{{cards2[1][0][3]}}">
+                    </div>
                 </div>
 
                 <script>
                 document.getElementById('showBtn6').onclick = function() {
                     const content = document.getElementById('hiddenContent6');
+                    content.style.display = 'block'; // Show the hidden content
+                    this.style.display = 'none';     // Hide the button itself
+                }
+                </script>
+                <script>
+                document.getElementById('showBtn7').onclick = function() {
+                    const content = document.getElementById('bot2Cards');
                     content.style.display = 'block'; // Show the hidden content
                     this.style.display = 'none';     // Hide the button itself
                 }

@@ -45,10 +45,12 @@ def home():
 def play():
     cardss=[]
     cardss1=[]
+    cardss2=[]
     cardssp=[]
     select=[]
     p = []
     p1 = []
+    p2=[]
     y = []
     f = False
     y1 = []
@@ -57,6 +59,8 @@ def play():
     select = []
     y2 = []
     y2c = []
+    y3=[]
+    y3c=[]
     yp = []
     ypc = []
     won = "none"
@@ -102,6 +106,23 @@ def play():
         y2.append(cards[0][2])
         y2c.append(cards[0][1])
         p1.append(cards[0][3])
+        conn.close()
+
+
+        #bot2's cards extraction
+    for i in range(1, 3):
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        ran = random.randint(1, 52)
+        while select.count(ran) >= 1:
+            ran = random.randint(1, 52)
+        cursor.execute(f'SELECT Card.id, Colour.colours, Number.numbers, Card.name, Card.media FROM Card JOIN Colour ON Card.colour = Colour.id JOIN CardNumber ON Card.id = CardNumber.card_id JOIN Number ON CardNumber.number_id = Number.id WHERE Card.id = {ran} ORDER BY Card.id')
+        cards = cursor.fetchall()
+        select.append(cards[0][0])
+        cardss2.append(cards)
+        y3.append(cards[0][2])
+        y3c.append(cards[0][1])
+        p2.append(cards[0][3])
         conn.close()
 
 
@@ -459,25 +480,217 @@ def play():
                             # the code above is checking pairs and Big card
 
 
+#The following code is for assess the cards of CPU2
+    z = 0
+    score2 = 0
+    y = []
+    threes = False
+    card2 = 0
+# y.append(input("enter 7 nums,seperate with space, use 14 for A\n").split())
+    y3.extend(yp)
+    y3c.extend(ypc)
+    y.append(y3)
+    y.sort()
+    for i in y:
+        i.sort()
+        p2.sort()
+        print(f"Bot 1's card {p2}")
+        if len(i) != 7:
+            print("wrong amount")
+            exit()
+        for ii in i:
+            try:
+                ii = int(ii)
+                if 2 <= ii <= 14:
+                    for e in range(2, 15):
+                        if i.count(e) > 3:
+                            threes = True
+                            card2 = e
+                else:
+                    print("wrong input")
+                    exit()
+            except ValueError:
+                print("wrong")
+                exit()
+    if threes is True:
+        print("there is a four of a kind in here")
+        score2 += 7
+        # the code above is checking the 4 of a kind
+    else:
+        z = 0
+        threes = False
+        for i in y:
+            i.sort()
+            for e in range(2, 15):
+                if i.count(e) > 2:
+                    for t in range(2, 15):
+                        if t != e:
+                            if i.count(t) > 1:
+                                threes = True
+                                card2 = e + t * 0.01
+        if threes is True:
+            print("there is a full house in here")
+            score2 += 6
+            # the code above is checking full house
+        else:
+            z = 0
+            threes = False
+            y3c.sort()
+            y3c.reverse()
+            for h in range(1, 5):
+                if y3c.count(h) > 4:
+                    for w in range(0, 5):
+                        threes = True
+                        card2 = y[0][w]
+                        if y3c[w] != h:
+                            continue
+            if threes is True:
+                z = 0
+                T = 0
+                ee = 0
+                Straight = False
+                for i in y:
+                    i.sort()
+                    i.reverse()
+                    for ii in i:
+                        try:
+                            ii = int(ii)
+                            if z != 0:
+                                if ii-z == -1:
+                                    T = T+1
+                                elif ii-z == 0:
+                                    T = T
+                                else:
+                                    T = 0
+                            z = ii
+                            if T >= 4:
+                                Straight = True
+                                card2 = z
+                        except ValueError:
+                            print("wrong")
+                            exit()
+                if Straight is True:
+                    print("it's a straight flush")
+                    score2 += 10
+                else:
+                    print("there is a flush in here")
+                    score2 += 5
+            # the code above is checking flush and stright flush
+            # because the 7 cards can not form full house and flush at once
+            # the assess of stright flush can go after the full house
+            else:
+                z = 0
+                T = 0
+                ee = 0
+                Straight = False
+                for i in y:
+                    i.sort()
+                    i.reverse()
+                    for ii in i:
+                        try:
+                            ii = int(ii)
+                            if z != 0:
+                                if ii-z == -1:
+                                    T = T+1
+                                elif ii-z == 0:
+                                    T = T
+                                else:
+                                    T = 0
+                            z = ii
+                            if T >= 4:
+                                Straight = True
+                                card2 = z
+                                break
+                        except ValueError:
+                            print("wrong")
+                            exit()
+                if Straight is True:
+                    print("it's a straight")
+                    score2 += 4
+                    # the code above is checking the Straight
+                else:
+                    z = 0
+                    threes = False
+                    for i in y:
+                        i.sort()
+                        for e in range(2, 15):
+                            if i.count(e) > 2:
+                                threes = True
+                                card2 = e
+                    if threes is True:
+                        print("there is a three of a kind in here")
+                        score2 += 3
+                        # the code above is checking the 3 of a kind
+                    else:
+                        pair = 0
+                        z = 0
+                        for i in y:
+                            i.sort()
+                            for ii in i:
+                                ii = int(ii)
+                                if z != 0:
+                                    if ii == z:
+                                        pair = pair + 1
+                                        if card2 == 0:
+                                            card2 = ii
+                                        else:
+                                            card2 += ii * 3
+                                z = ii
+                            if pair > 2:
+                                pair = 2
+                            if pair != 0:
+                                print(f"there is {pair} pairs in here")
+                                score2 += pair
+                            else:
+                                print("Biggest card")
+                                score2 = 0
+                                i.sort()
+                                card2 = y[0][6]
+                            # the code above is checking pairs and Big card
+
+
     # the following code is for compare the cards
     print(card)
     print(card1)
-    if score > score1:
+    if score > score1 and score > score2:
         won = "you won!"
         money += 200
-    elif score1 > score:
-        won = "you lost!"
+    elif score1 > score and score1 > score2:
+        won = "bot 1 won!"
+        money -= 200
+    elif score2 > score and score2 > score1:
+        won = "bot 2 won!"
         money -= 200
     else:
-        if card > card1:
-            won = "you won!"
-            money += 200
-        elif card1 > card:
-            won = "you lost!"
-            money -= 200
-        else:
+        if score == score1 and score == score2:
             won = "it's a draw!"
-            money += 0
+        elif score == score1:
+            if card > card1:
+                won = "you won!"
+                money += 200
+            elif card1 > card:
+                won = "bot 1 won!"
+                money -= 200
+            else:
+                won = "it's a draw!"
+        elif score == score2:
+            if card > card2:
+                won = "you won!"
+                money += 200
+            elif card2 > card:
+                won = "bot 2 won!"
+                money -= 200
+            else:
+                won = "it's a draw!"
+        elif score1 == score2:
+            if card1 > card2:
+                won = "bot 1 won!"
+                money -= 200
+            elif card2 > card1:
+                won = "bot 2 won!"
+                money -= 200
+            else:
+                won = "it's a draw!"
     print("\n")
 
 
@@ -489,7 +702,7 @@ def play():
     conn.close()
 
         
-    return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, won=won, money=money, money1=money1)
+    return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won=won, money=money, money1=money1)
 
 
 if __name__ == "__main__":
