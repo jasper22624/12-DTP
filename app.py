@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import sqlite3
 import random
 
@@ -41,7 +41,7 @@ def home():
     return render_template("home1.html", title="home")
 
 
-@app.route("/play")
+@app.route("/play", methods=["GET", "POST"])
 def play():
     cardss=[]
     cardss1=[]
@@ -64,6 +64,13 @@ def play():
     yp = []
     ypc = []
     won = "none"
+    bet = 200
+    score1 = 0
+    score2 = 0
+    q=0
+    raise_amount = 0
+    c=0
+
 
     #the following code is for extract data from table - "Money"
     conn = sqlite3.connect('data.db')
@@ -75,7 +82,7 @@ def play():
     money1 = money
 
 
-        #player's cards extraction
+     #player's cards extraction
     for i in range(1,3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
@@ -649,49 +656,88 @@ def play():
                             # the code above is checking pairs and Big card
 
 
+        # Check if the player folded
+    if request.method == "POST" and "fold" in request.form:
+        # Player folds, bot with the highest score wins
+        if score1 > score2:
+            won = "bot 1 won!"
+        else:
+            won = "bot 2 won!"
+        q+=1
+        bet = bet / 2
+        money -= bet  # Player loses half the bet
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
+        conn.commit()
+        conn.close()
+        return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won=won, money=money, money1=money1)
+
+    # Check if the player raised
+    if request.method == "POST" and "raise" in request.form:
+        try:
+            raise_amount = int(request.form.get("raise_amount", 0))  # Default to 0 if empty
+        except ValueError:
+            raise_amount = 0
+        if raise_amount <= 0:
+            return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won="Invalid raise amount!", money=money, money1=money1)
+        if raise_amount > money:
+            return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won="Not enough money!", money=money, money1=money1)
+        bet += raise_amount
+        money -= raise_amount
+        
+
     # the following code is for compare the cards
     print(card)
     print(card1)
     if score > score1 and score > score2:
         won = "you won!"
-        money += 200
+        c=1
     elif score1 > score and score1 > score2:
         won = "bot 1 won!"
-        money -= 200
+        c=-1
     elif score2 > score and score2 > score1:
         won = "bot 2 won!"
-        money -= 200
+        c=-1
     else:
         if score == score1 and score == score2:
             won = "it's a draw!"
         elif score == score1:
             if card > card1:
                 won = "you won!"
-                money += 200
+                c=1
             elif card1 > card:
                 won = "bot 1 won!"
-                money -= 200
+                c=-1
             else:
                 won = "it's a draw!"
         elif score == score2:
             if card > card2:
                 won = "you won!"
-                money += 200
+                c=1
             elif card2 > card:
                 won = "bot 2 won!"
-                money -= 200
+                c=-1
             else:
                 won = "it's a draw!"
         elif score1 == score2:
             if card1 > card2:
                 won = "bot 1 won!"
-                money -= 200
+                c=-1
             elif card2 > card1:
                 won = "bot 2 won!"
-                money -= 200
+                c=-1
             else:
                 won = "it's a draw!"
     print("\n")
+
+    
+    if q == 0:
+        if c == 1:
+            money += bet * 2
+        elif c == 0:
+            money += bet
+        # if bot win, player lose the bet money
 
 
     # after update money, we need to update to the data.db

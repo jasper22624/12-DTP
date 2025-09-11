@@ -3,6 +3,16 @@
 <p>This is the playing page</p>
 <hr>
 
+<div style="position: fixed; bottom: 10px; left: 10px; color: white; font-size: 18px;">
+    <p>Money: ${{ money1 }}</p>
+</div>
+
+<form method="POST" style="position: absolute; bottom: 300px; left: 43%; display: flex; align-items: center; gap: 10px;">
+    <button type="submit" name="fold" class="btn-fold">Fold</button>
+    <button type="submit" name="raise" class="btn-raise">Raise</button>
+    <input type="number" name="raise_amount" placeholder="Enter raise amount" min="1" class="raise-input">
+</form>
+
 <div class="player" style="position: absolute;bottom: 0%;left: 40%;">
     <img src="{{ url_for('static', filename=cards[0][0][4]) }}" alt="{{cards[0][0][3]}}">
 </div>
