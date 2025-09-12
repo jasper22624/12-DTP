@@ -7,9 +7,80 @@
     <p>Money: ${{ money1 }}</p>
 </div>
 
-<form method="POST" style="position: absolute; bottom: 300px; left: 43%; display: flex; align-items: center; gap: 10px;">
-    <button type="submit" name="fold" class="btn-fold">Fold</button>
-    <button type="submit" name="raise" class="btn-raise">Raise</button>
+<button class="btn-fold" id="showBtn69" style="position: absolute; justify-content: center; bottom: 300px; left: 43%; display: flex; align-items: center;">Fold</button>
+
+<div id="hiddenContent67" style="display: none;">
+    <div id="hiddenContent52" style="position: absolute;top: 30%;left: 10%;font-size: 32px;">    
+        <div id="hiddenContent32" style="position: fixed;bottom: 50%;left: 65%;">
+            <img src="{{ url_for('static', filename=cardsp[4][0][4]) }}" alt="{{cardsp[4][0][3]}}">
+        </div>
+        <div id="hiddenContent22" style="position: fixed;bottom: 50%;left: 55%;">
+            <img src="{{ url_for('static', filename=cardsp[3][0][4]) }}" alt="{{cardsp[3][0][3]}}">
+        </div>
+        <div id="hiddenContent2" style="position: fixed;bottom: 50%;left: 45%;">
+            <img src="{{ url_for('static', filename=cardsp[2][0][4]) }}" alt="{{cardsp[2][0][3]}}">
+        </div>
+        <div id="hiddenContent1" style="position: fixed;bottom: 50%;left: 35%;">
+            <img src="{{ url_for('static', filename=cardsp[1][0][4]) }}" alt="{{cardsp[1][0][3]}}">
+        </div>
+        <div id="hiddenContent0" style="position: fixed;bottom: 50%;left: 25%;">
+            <img src="{{ url_for('static', filename=cardsp[0][0][4]) }}" alt="{{cardsp[0][0][3]}}">
+        </div>
+        <div id="hiddenContent42" style="position: fixed;bottom: 30%;left: 33%;font-size: 32px;">    
+            {{won}}
+            Your current money: {{money}}
+        </div>
+        <div id="hiddenContent52" style="position: fixed;top: 30%;left: 5%;font-size: 32px;">    
+            <p>Bot 1's cards</p>
+            <img src="{{ url_for('static', filename=cards1[0][0][4]) }}" alt="{{cards1[0][0][3]}}">
+            <img src="{{ url_for('static', filename=cards1[1][0][4]) }}" alt="{{cards1[1][0][3]}}">
+        </div>
+        <div id="hiddenContent62" style="position: fixed;top: 30%;right: 5%;font-size: 32px;">    
+            <p>Bot 2's cards:</p>
+            <img src="{{ url_for('static', filename=cards2[0][0][4]) }}" alt="{{cards2[0][0][3]}}">
+            <img src="{{ url_for('static', filename=cards2[1][0][4]) }}" alt="{{cards2[1][0][3]}}">
+        </div>
+        <div id="hd772" style="position: fixed; bottom: 300px; left: 43%; display: flex; align-items: center; gap: 10px;">
+            <form method="POST" style="position: fixed; bottom: 300px; left: 43%; display: flex; align-items: center; gap: 10px;">
+                <button type="submit" name="fold" class="btn-fold">Next Game</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('showBtn69').onclick = function() {
+    const content = document.getElementById('hiddenContent67');
+    const toHide = document.getElementById('showBtn', 'showBtn3', 'showBtn4', 'showBtn5');
+    const raiseButton = document.getElementById('showBtn1');
+    const raiseInput = document.querySelector('.raise-input');
+
+    content.style.display = 'block'; // Show the hidden content
+    this.style.display = 'none';     // Hide the "Fold" button itself
+
+    if (toHide) {
+        toHide.style.display = 'none'; // Hide the "Check" button
+    }
+    if (raiseButton) {
+        raiseButton.style.display = 'none'; // Hide the "Raise" button
+    }
+    if (raiseInput) {
+        raiseInput.style.display = 'none'; // Hide the "Raise Amount" input field
+    }
+}
+
+// Hide "Raise" button and "Raise Amount" input after one click
+document.getElementById('showBtn1').onclick = function() {
+    this.style.display = 'none'; // Hide the "Raise" button
+    const raiseInput = document.querySelector('.raise-input');
+    if (raiseInput) {
+        raiseInput.style.display = 'none'; // Hide the "Raise Amount" input field
+    }
+}
+</script>
+
+<form method="POST" style="position: absolute; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
+    <button type="submit" name="raise" id="showBtn1" class="btn-raise">Raise</button>
     <input type="number" name="raise_amount" placeholder="Enter raise amount" min="1" class="raise-input">
 </form>
 
@@ -24,10 +95,10 @@
 <button class="check" id="showBtn">Check</button>
 
 <div id="hiddenContent" style="display: none;">
-  <div id="hiddenContent0" style="position: fixed;bottom: 50%;left: 35%;">
+  <div id="hiddenContent0" style="position: fixed;bottom: 50%;left: 25%;">
     <img src="{{ url_for('static', filename=cardsp[0][0][4]) }}" alt="{{cardsp[0][0][3]}}">
   </div>
-  <div id="hiddenContent1" style="position: fixed;bottom: 50%;left: 40%;">
+  <div id="hiddenContent1" style="position: fixed;bottom: 50%;left: 35%;">
     <img src="{{ url_for('static', filename=cardsp[1][0][4]) }}" alt="{{cardsp[1][0][3]}}">
   </div>
   <div id="hiddenContent2" style="position: fixed;bottom: 50%;left: 45%;">
@@ -36,13 +107,13 @@
     <button class="check" id="showBtn3">Check</button>
 
     <div id="hiddenContent3" style="display: none;">
-        <div id="hiddenContent22" style="position: fixed;bottom: 50%;left: 50%;">
+        <div id="hiddenContent22" style="position: fixed;bottom: 50%;left: 55%;">
             <img src="{{ url_for('static', filename=cardsp[3][0][4]) }}" alt="{{cardsp[3][0][3]}}">
         </div>
         <button class="check" id="showBtn4">Check</button>
 
         <div id="hiddenContent4" style="display: none;">
-            <div id="hiddenContent32" style="position: fixed;bottom: 50%;left: 55%;">
+            <div id="hiddenContent32" style="position: fixed;bottom: 50%;left: 65%;">
                 <img src="{{ url_for('static', filename=cardsp[4][0][4]) }}" alt="{{cardsp[4][0][3]}}">
             </div>
             <button class="check" id="showBtn5">Results</button>
@@ -52,34 +123,32 @@
                     {{won}}
                     Your current money: {{money}}
                 </div>
-                <button class="check" id="showBtn6">Opponent's Card</button>
 
-                <div id="hiddenContent6" style="display: none;">
-                    <div id="hiddenContent52" style="position: absolute;top: 30%;left: 10%;font-size: 32px;">    
-                        <p>bot1's cards</p>
+                <div id="hiddenContent6">
+                    <div id="hiddenContent52" style="position: absolute;top: 30%;left: 5%;font-size: 32px;">    
+                        <p>Bot 1's cards</p>
                         <img src="{{ url_for('static', filename=cards1[0][0][4]) }}" alt="{{cards1[0][0][3]}}">
                         <img src="{{ url_for('static', filename=cards1[1][0][4]) }}" alt="{{cards1[1][0][3]}}">
                     </div>
                 </div>
 
                 <div id="bot2Cards">
-                    <div id="hiddenContent62" style="position: absolute;top: 30%;right: 10%;font-size: 32px;">    
+                    <div id="hiddenContent62" style="position: absolute;top: 30%;right: 5%;font-size: 32px;">    
                         <p>Bot 2's cards:</p>
                         <img src="{{ url_for('static', filename=cards2[0][0][4]) }}" alt="{{cards2[0][0][3]}}">
                         <img src="{{ url_for('static', filename=cards2[1][0][4]) }}" alt="{{cards2[1][0][3]}}">
                     </div>
                 </div>
 
+                <div id="hd732" style="position: fixed; bottom: 300px; left: 40%; display: flex; align-items: center; gap: 10px;">
+                    <a href="play">
+                        <h2>click to play another game</h2>
+                    </a>
+                </div>
+
                 <script>
                 document.getElementById('showBtn6').onclick = function() {
-                    const content = document.getElementById('hiddenContent6');
-                    content.style.display = 'block'; // Show the hidden content
-                    this.style.display = 'none';     // Hide the button itself
-                }
-                </script>
-                <script>
-                document.getElementById('showBtn7').onclick = function() {
-                    const content = document.getElementById('bot2Cards');
+                    const content = document.getElementById('hiddenContent6', 'bot2Cards', 'hd732');
                     content.style.display = 'block'; // Show the hidden content
                     this.style.display = 'none';     // Hide the button itself
                 }
@@ -92,6 +161,22 @@
                 const content = document.getElementById('hiddenContent5');
                 content.style.display = 'block'; // Show the hidden content
                 this.style.display = 'none';     // Hide the button itself
+                const toHide = document.getElementById('showBtn69');
+                const raiseButton = document.getElementById('showBtn1');
+                const raiseInput = document.querySelector('.raise-input');
+
+                content.style.display = 'block'; // Show the hidden content
+                this.style.display = 'none';     // Hide the "Fold" button itself
+
+                if (toHide) {
+                    toHide.style.display = 'none'; // Hide the "Check" button
+                }
+                if (raiseButton) {
+                    raiseButton.style.display = 'none'; // Hide the "Raise" button
+                }
+                if (raiseInput) {
+                    raiseInput.style.display = 'none'; // Hide the "Raise Amount" input field
+                }
             }
             </script>
             </div>
@@ -124,12 +209,13 @@
   }
 </script>
 
-
-
-<a href="home" style="position: absolute;bottom: 10%;left: 85%;">
-    <h2>click to exit</h2>
+<a href="instruction" style="position: absolute; top: 40px; right: 5%; text-decoration: none; color: white; background-color: orange; padding: 20px 40px; border-radius: 10px; font-size: 20px;">
+    How to Play
 </a>
 
+<a href="home" style="position: absolute;bottom: 15%;left: 85%;">
+    <h2>click to exit</h2>
+</a>
 
 <a href="play" style="position: absolute;bottom: 5%;left: 75%;">
     <h2>click to play another game</h2>

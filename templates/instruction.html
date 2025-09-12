@@ -1,0 +1,21 @@
+{% extends "index.html" %}
+{% block content %}
+<h1>How to Play Poker</h1>
+<hr>
+<h1>Welcome to the poker game! Here are the instructions:</h1>
+<p>Each player is dealt two private cards, and five public cards are dealt face-up on the table.</p>
+<p>Your goal is to make the best five-card hand using any combination of your two cards and the five public cards.</p>
+<p>You can choose to "Raise" to increase the bet, "Check" to stay in the game without raising, or "Fold" to forfeit the round.</p>
+<p>If you fold, you will lost less money than other options.</p>
+<p>The player with the best hand wins the pot.</p>
+<p>Hand rankings (from highest to lowest): Royal Flush, Straight Flush, Four of a Kind, Full House, Flush, Straight, Three of a Kind, Two Pair, One Pair, High Card.</p>
+<h2>Good luck and have fun!</h2>
+<p>Notice: If you quit the playing page during a game, the game will continue with you check to the end! And you may lost money this way!</p>
+<hr>
+<a href="play" style="width: 150px; height: 70px; padding: 20px 40px; background-color: green; color: white; text-decoration: none; border-radius: 10px; font-size: 30px; position: absolute; bottom: 10%; left: 32%;">
+    Start Playing
+</a>
+<a href="home" style="width: 150px; height: 70px; padding: 20px 40px; background-color: blue; color: white; text-decoration: none; border-radius: 10px; font-size: 25px; position: absolute; bottom: 10%; left: 52%;">
+    Back to Home
+</a>
+{% endblock %}
