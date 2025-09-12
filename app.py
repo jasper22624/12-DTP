@@ -744,7 +744,7 @@ def play():
     
     if q == 0:
         if c == 1:
-            money += bet * 2
+            money += bet * 3
         elif c == 0:
             money += bet
         # if bot win, player lose the bet money

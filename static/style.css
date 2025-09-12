@@ -38,7 +38,6 @@ img {
 }
 
 
-/* Style for the Fold button */
 .btn-fold {
     background-color: red;
     color: white;
@@ -51,12 +50,10 @@ img {
     transition: background-color 1.3s ease;
 }
 
-/* Hover effect for the Fold button */
 .btn-fold:hover {
     background-color: darkred;
 }
 
-/* Style for the Raise button */
 .btn-raise {
     background-color: green;
     color: white;
@@ -69,12 +66,10 @@ img {
     transition: background-color 1.3s ease;
 }
 
-/* Hover effect for the Raise button */
 .btn-raise:hover {
     background-color: darkgreen;
 }
 
-/* Style for the Raise Amount input */
 .raise-input {
     padding: 10px;
     font-size: 16px;
