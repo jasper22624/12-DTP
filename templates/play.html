@@ -1,13 +1,14 @@
 {% extends "index.html" %}
 {% block content %}
-<p>This is the playing page</p>
 <hr>
+<h2>This is the playing page</h2>
+<!--The number of showBtn are messed up, not affecting the display, i may fix it afterward-->
 
 <div style="position: fixed; bottom: 10px; left: 10px; color: white; font-size: 18px;">
     <h1>Money: ${{ money1 }}</h1>
 </div>
 
-<button class="btn-fold" id="showBtn69" style="position: absolute; justify-content: center; bottom: 300px; left: 43%; display: flex; align-items: center;">Fold</button>
+<button class="btn-fold" id="showBtn69" style="position: absolute; justify-content: center; bottom: 300px; left: 51%; display: flex; align-items: center;">Fold</button>
 
 <div id="hiddenContent67" style="display: none;">
     <div id="hiddenContent52" style="position: absolute;top: 30%;left: 10%;font-size: 32px;">    
@@ -40,8 +41,8 @@
             <img src="{{ url_for('static', filename=cards2[0][0][4]) }}" alt="{{cards2[0][0][3]}}">
             <img src="{{ url_for('static', filename=cards2[1][0][4]) }}" alt="{{cards2[1][0][3]}}">
         </div>
-        <div id="hd772" style="position: fixed; bottom: 300px; left: 43%; display: flex; align-items: center; gap: 10px;">
-            <form method="POST" style="position: fixed; bottom: 300px; left: 43%; display: flex; align-items: center; gap: 10px;">
+        <div id="hd772" style="position: fixed; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
+            <form method="POST" style="position: fixed; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
                 <button type="submit" name="fold" class="btn-fold">Next Game</button>
             </form>
         </div>
@@ -51,38 +52,14 @@
 <script>
 document.getElementById('showBtn69').onclick = function() {
     const content = document.getElementById('hiddenContent67');
-    const toHide = document.getElementById('showBtn', 'showBtn3', 'showBtn4', 'showBtn5');
-    const raiseButton = document.getElementById('showBtn1');
-    const raiseInput = document.querySelector('.raise-input');
-
+    document.getElementById('showBtn').style.display = 'none';
+    document.getElementById('showBtn3').style.display = 'none';
+    document.getElementById('showBtn4').style.display = 'none';
+    document.getElementById('showBtn5').style.display = 'none';
     content.style.display = 'block'; // Show the hidden content
     this.style.display = 'none';     // Hide the "Fold" button itself
-
-    if (toHide) {
-        toHide.style.display = 'none'; // Hide the "Check" button
-    }
-    if (raiseButton) {
-        raiseButton.style.display = 'none'; // Hide the "Raise" button
-    }
-    if (raiseInput) {
-        raiseInput.style.display = 'none'; // Hide the "Raise Amount" input field
-    }
-}
-
-// Hide "Raise" button and "Raise Amount" input after one click
-document.getElementById('showBtn1').onclick = function() {
-    this.style.display = 'none'; // Hide the "Raise" button
-    const raiseInput = document.querySelector('.raise-input');
-    if (raiseInput) {
-        raiseInput.style.display = 'none'; // Hide the "Raise Amount" input field
-    }
 }
 </script>
-
-<form method="POST" style="position: absolute; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
-    <button type="submit" name="raise" id="showBtn1" class="btn-raise">Raise</button>
-    <input type="number" name="raise_amount" placeholder="Enter raise amount" min="1" class="raise-input">
-</form>
 
 <div class="player" style="position: absolute;bottom: 0%;left: 40%;">
     <img src="{{ url_for('static', filename=cards[0][0][4]) }}" alt="{{cards[0][0][3]}}">
@@ -161,22 +138,7 @@ document.getElementById('showBtn1').onclick = function() {
                 const content = document.getElementById('hiddenContent5');
                 content.style.display = 'block'; // Show the hidden content
                 this.style.display = 'none';     // Hide the button itself
-                const toHide = document.getElementById('showBtn69');
-                const raiseButton = document.getElementById('showBtn1');
-                const raiseInput = document.querySelector('.raise-input');
-
-                content.style.display = 'block'; // Show the hidden content
-                this.style.display = 'none';     // Hide the "Fold" button itself
-
-                if (toHide) {
-                    toHide.style.display = 'none'; // Hide the "Check" button
-                }
-                if (raiseButton) {
-                    raiseButton.style.display = 'none'; // Hide the "Raise" button
-                }
-                if (raiseInput) {
-                    raiseInput.style.display = 'none'; // Hide the "Raise Amount" input field
-                }
+                document.getElementById('showBtn69').style.display = 'none';
             }
             </script>
             </div>

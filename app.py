@@ -662,13 +662,13 @@ def play():
     if request.method == "POST":
         if "fold" in request.form:
             # Player folds, bot with the highest score wins
+            # don't need to check for draw because if player fold, player lose anyway
             if score1 > score2:
                 won = "bot 1 won!"
             else:
                 won = "bot 2 won!"
             q += 1
-            bet = bet / 2
-            money += 100  # Player loses half the bet
+            money += 100  # Player loses half the bet, reward for folding
             conn = sqlite3.connect('data.db')
             cursor = conn.cursor()
             cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
@@ -679,7 +679,7 @@ def play():
 
         if "raise" in request.form:
             try:
-                raise_amount = int(request.form.get("raise_amount", 0))  # Default to 0 if empty
+                raise_amount = int(request.form.get("raise_amount", 0))  # Default to 0
             except ValueError:
                 raise_amount = 0
             if raise_amount <= 0:
@@ -688,14 +688,12 @@ def play():
                 return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won="Not enough money!", money=money, money1=money2)
             bet += raise_amount
             money -= raise_amount
-            # Update the database with the new money value
             conn = sqlite3.connect('data.db')
             cursor = conn.cursor()
             cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
             conn.commit()
             conn.close()
-            # Stay on the current game and show updated money and bet
-            return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won=won, money=money, money1=money2)
+
 
     # the following code is for compare the cards
     print(card)
