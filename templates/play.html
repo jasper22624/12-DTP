@@ -1,6 +1,5 @@
 {% extends "index.html" %}
 {% block content %}
-<hr>
 <h2>This is the playing page</h2>
 <!--The number of showBtn are messed up, not affecting the display, i may fix it afterward-->
 
@@ -29,6 +28,7 @@
         </div>
         <div id="hiddenContent42" style="position: fixed;bottom: 30%;left: 33%;font-size: 32px;">    
             {{won}}
+            {# not the ideal way to achieve this, but the easy way #}
             {% if stat == 2 %}
             Your current money: {{money-500}}
             {% endif %}
@@ -182,7 +182,7 @@ document.getElementById('showBtn69').onclick = function() {
   }
 </script>
 
-<a href="instruction" style="position: absolute; top: 40px; right: 5%; text-decoration: none; color: white; background-color: orange; padding: 20px 40px; border-radius: 10px; font-size: 20px;">
+<a href="instruction" style="position: absolute; top: 30px; right: 5%; text-decoration: none; color: white; background-color: orange; padding: 20px 40px; border-radius: 10px; font-size: 20px;">
     How to Play
 </a>
 
