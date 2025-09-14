@@ -10,6 +10,9 @@ money = 2000
 money1 = money
 cardss1=[]
 cardssp=[]
+score1=0
+score2=0
+cardss2=[]
 
 #The following code is for creating a table called 'Money'
 #This is for storage of varible - money
@@ -17,12 +20,12 @@ conn = sqlite3.connect('data.db')
 cursor = conn.cursor()
 
 #if the data.db is intialized, we need to add table
-cursor.execute("CREATE TABLE IF NOT EXISTS Money (id INTEGER PRIMARY KEY, money INTEGER)")
+cursor.execute("CREATE TABLE IF NOT EXISTS Money (id INTEGER PRIMARY KEY, money INTEGER, won INTEGER)")
 conn.commit()
 
-cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
+cursor.execute("UPDATE Money SET money = ?, won = ? WHERE id = ?", (money, 0, 1))
 if cursor.rowcount == 0: #if the data.db is intialized, we need to add data
-    cursor.execute("INSERT INTO Money (id, money) VALUES (?, ?)", (1, money))
+    cursor.execute("INSERT INTO Money (id, money, won) VALUES (?, ?, ?)", (1, money, 0))
 conn.commit()
 
 conn.close()
@@ -48,6 +51,39 @@ def instruction():
 
 @app.route("/play", methods=["GET", "POST"])
 def play():
+    score1=0
+    score2=0
+    q=0
+    if request.method == "POST":
+        if "fold" in request.form:
+            conn = sqlite3.connect('data.db')
+            cursor = conn.cursor()
+            cursor.execute("select Money.money, Money.won from Money where id=1")
+            statt = cursor.fetchall()
+            stat = statt[0][1]
+            money = statt[0][0]
+            conn.close()
+            # Player folds, Bot with the highest score wins
+            # don't need to check for draw because if player fold, player lose anyway
+            if score1 > score2:
+                won = "Bot 1 won!"
+            else:
+                won = "Bot 2 won!"
+            q += 1
+            money += 100  # Player get back half the bet, reward for folding
+            if stat == -1:
+                money -= 200
+            if stat == 1:
+                money -= 300
+            if stat == 2:
+                money -= 600
+            conn = sqlite3.connect('data.db')
+            cursor = conn.cursor()
+            cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
+            conn.commit()
+            conn.close()
+    
+    
     cardss=[]
     cardss1=[]
     cardss2=[]
@@ -74,6 +110,7 @@ def play():
     score2 = 0
     q=0
     raise_amount = 0
+    stat=0
     c=0
 
 
@@ -105,7 +142,7 @@ def play():
         conn.close()
 
 
-        #bot's cards extraction
+        #Bot's cards extraction
     for i in range(1,3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
@@ -659,104 +696,84 @@ def play():
                             # the code above is checking pairs and Big card
 
 
-    if request.method == "POST":
-        if "fold" in request.form:
-            # Player folds, bot with the highest score wins
-            # don't need to check for draw because if player fold, player lose anyway
-            if score1 > score2:
-                won = "bot 1 won!"
-            else:
-                won = "bot 2 won!"
-            q += 1
-            money += 100  # Player loses half the bet, reward for folding
-            conn = sqlite3.connect('data.db')
-            cursor = conn.cursor()
-            cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
-            conn.commit()
-            conn.close()
-            # Show the result without moving to the next game
-            return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won=won, money=money, money1=money2)
-
-        if "raise" in request.form:
-            try:
-                raise_amount = int(request.form.get("raise_amount", 0))  # Default to 0
-            except ValueError:
-                raise_amount = 0
-            if raise_amount <= 0:
-                return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won="Invalid raise amount!", money=money, money1=money2)
-            if raise_amount > money:
-                return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won="Not enough money!", money=money, money1=money2)
-            bet += raise_amount
-            money -= raise_amount
-            conn = sqlite3.connect('data.db')
-            cursor = conn.cursor()
-            cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
-            conn.commit()
-            conn.close()
-
-
     # the following code is for compare the cards
     print(card)
     print(card1)
     if score > score1 and score > score2:
-        won = "you won!"
+        won = "You won!"
         c=1
     elif score1 > score and score1 > score2:
-        won = "bot 1 won!"
+        won = "Bot 1 won!"
         c=-1
     elif score2 > score and score2 > score1:
-        won = "bot 2 won!"
+        won = "Bot 2 won!"
+        c=-1
+    elif (score > score1 and score == score2):
+        if card > card2:
+            won = "You won!"
+            c=1
+        elif card2 > card:
+            won = "Bot 2 won!"
+            c=-1
+        else:
+            won = "It's a draw!"
+            c=0.5
+    elif (score > score2 and score == score1):
+        if card > card1:
+            won = "You won!"
+            c=1
+        elif card1 > card:
+            won = "Bot 1 won!"
+            c=-1
+        else:
+            won = "It's a draw!"
+            c=0.5
+    elif score < score1: # player lost anyway, no need to compare bots' card
+        won = "You lost!"
         c=-1
     else:
-        if score == score1 and score == score2:
-            won = "it's a draw!"
-        elif score == score1:
-            if card > card1:
-                won = "you won!"
-                c=1
-            elif card1 > card:
-                won = "bot 1 won!"
-                c=-1
-            else:
-                won = "it's a draw!"
-        elif score == score2:
-            if card > card2:
-                won = "you won!"
-                c=1
-            elif card2 > card:
-                won = "bot 2 won!"
-                c=-1
-            else:
-                won = "it's a draw!"
-        elif score1 == score2:
-            if card1 > card2:
-                won = "bot 1 won!"
-                c=-1
-            elif card2 > card1:
-                won = "bot 2 won!"
-                c=-1
-            else:
-                won = "it's a draw!"
+        if card > card1 and card > card2:
+            won = "You won!"
+            c=1
+        elif card1 > card and card1 > card2:
+            won = "Bot 1 won!"
+            c=-1
+        elif card2 > card and card2 > card1:
+            won = "Bot 2 won!"
+            c=-1
+        elif (card == card1 and card > card2) or (card == card2 and card > card1):
+            won = "It's a draw!"
+            c=0.5
+        elif card < card1:
+            won = "You lost!"
+            c=-1
+        else:
+            won = "It's a draw!"
     print("\n")
 
     
     if q == 0:
         if c == 1:
             money += bet * 3
-        elif c == 0:
+            stat=2
+        if c == 0.5:
+            money += bet * 1.5
+            stat=1
+        if c == 0:
             money += bet
-        # if bot win, player lose the bet money
+            stat=-1
+        # if Bot win, player lose the bet money
 
 
     # after update money, we need to update to the data.db
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
-    cursor.execute("UPDATE Money SET money = ? WHERE id = ?", (money, 1))
+    cursor.execute("UPDATE Money SET money = ?, won = ? WHERE id = ?", (money,stat,1))
     conn.commit()
     conn.close()
 
         
-    return render_template("play.html", title="play", cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won=won, money=money, money1=money2)
+    return render_template("play.html", title="play", stat=stat, cards=cardss, cardsp=cardssp, cards1=cardss1, cards2=cardss2, won=won, money=money, money1=money2)
 
 
 if __name__ == "__main__":

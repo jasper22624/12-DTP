@@ -29,7 +29,18 @@
         </div>
         <div id="hiddenContent42" style="position: fixed;bottom: 30%;left: 33%;font-size: 32px;">    
             {{won}}
-            Your current money: {{money}}
+            {% if stat == 2 %}
+            Your current money: {{money-500}}
+            {% endif %}
+            {% if stat == 1 %}
+            Your current money: {{money-200}}
+            {% endif %}
+            {% if stat == 0 %}
+            Your current money: {{money+100}}
+            {% endif %}	
+            {% if stat == -1 %}
+            Your current money: {{money-100}}
+            {% endif %}
         </div>
         <div id="hiddenContent52" style="position: fixed;top: 30%;left: 5%;font-size: 32px;">    
             <p>Bot 1's cards</p>
@@ -118,7 +129,7 @@ document.getElementById('showBtn69').onclick = function() {
                 </div>
 
                 <div id="hd732" style="position: fixed; bottom: 300px; left: 40%; display: flex; align-items: center; gap: 10px;">
-                    <a href="play" style="text-decoration: none; color: white; background-color: rgb(0, 255, 0); padding: 20px 40px; border-radius: 10px; font-size: 20px;">
+                    <a href="play" style="text-decoration: none; color: white; background-color: rgb(66, 77, 66); padding: 20px 40px; border-radius: 10px; font-size: 20px;">
                         click to play another game
                     </a>
                 </div>
@@ -175,11 +186,11 @@ document.getElementById('showBtn69').onclick = function() {
     How to Play
 </a>
 
-<a href="home" style="position: absolute;bottom: 15%;right: 5%; text-decoration: none; color: white; background-color: blue; padding: 20px 40px; border-radius: 10px; font-size: 20px;">
+<a href="home" style="position: absolute;bottom: 15%;right: 5%; text-decoration: none; color: white; background-color: rgb(76, 62, 183); padding: 20px 40px; border-radius: 10px; font-size: 20px;">
     click to exit
 </a>
 
-<a href="play" style="position: absolute;bottom: 5%;right: 5%; text-decoration: none; color: white; background-color: rgb(0, 255, 0); padding: 20px 40px; border-radius: 10px; font-size: 20px;">
+<a href="play" style="position: absolute;bottom: 5%;right: 5%; text-decoration: none; color: white; background-color: rgb(77, 66, 66); padding: 20px 40px; border-radius: 10px; font-size: 20px;">
     click to play another game
 </a>
 {% endblock %}
