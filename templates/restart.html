@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block content %}
+<!-- This is the restart page, shown when player money <= 0 -->
+<h1>Game Over</h1>
+<p></p>
+<h2>You have run out of money!</h2>
+<p>Unfortunately, you cannot continue playing because your balance can't afford the table fee.</p>
+<p>But don't worry—you can restart the game with a fresh balance and try again.</p>
+<p>Good luck on your next round!</p>
+<a href="/" style="width: 250px; height: 100px; padding: 30px 50px; background-color: rgb(76, 62, 183); color: white; text-decoration: none; border-radius: 10px; font-size: 25px; position: fixed; bottom: 10%; left: 60%;">
+    Back to Home
+</a>
+{% endblock %}

@@ -3,16 +3,13 @@ import sqlite3
 import random
 
 
-select = []
-ran = 0
-cardss = []
+selected_cards = []
+random_card = 0
+player_cards = []
 money = 2000
-money1 = money
-cardss1 = []
-cardssp = []
-score1 = 0
-score2 = 0
-cardss2 = []
+bot1_cards = []
+public_cards = []
+bot2_cards = []
 
 # The following code is for creating a table called 'Money'
 # This is for storage of varible - money
@@ -38,11 +35,6 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def start():
-    return render_template("start.html", title="starting")
-
-
-@app.route("/home")
 def home():
     return render_template("home1.html", title="home")
 
@@ -54,32 +46,32 @@ def instruction():
 
 @app.route("/play", methods=["GET", "POST"])
 def play():
-    score1 = 0
-    score2 = 0
-    q = 0
+    bot1_score = 0
+    bot2_score = 0
+    fold_status = 0
     if request.method == "POST":
         if "fold" in request.form:
             conn = sqlite3.connect('data.db')
             cursor = conn.cursor()
             cursor.execute('''select Money.money, Money.won
             from Money where id=1''')
-            statt = cursor.fetchone()
-            stat = statt[1]
-            money = statt[0]
+            game_status = cursor.fetchone()
+            previous_winning_status = game_status[1]
+            money = game_status[0]
             conn.close()
             # Player folds, Bot with the highest score wins
             # don't need to check for draw if player fold, player lose anyway
-            if score1 > score2:
-                won = "Bot 1 won!"
+            if bot1_score > bot2_score:
+                winning_status = "Bot 1 won!"
             else:
-                won = "Bot 2 won!"
-            q += 1
+                winning_status = "Bot 2 won!"
+            fold_status += 1
             money += 100  # Player get back half the bet, reward for folding
-            if stat == -1:
+            if previous_winning_status == -1:
                 money -= 200
-            if stat == 1:
+            if previous_winning_status == 1:
                 money -= 300
-            if stat == 2:
+            if previous_winning_status == 2:
                 money -= 600
             conn = sqlite3.connect('data.db')
             cursor = conn.cursor()
@@ -88,709 +80,715 @@ def play():
             conn.commit()
             conn.close()
 
-    cardss = []
-    cardss1 = []
-    cardss2 = []
-    cardssp = []
-    select = []
-    p = []
-    p1 = []
-    p2 = []
-    y = []
-    y1 = []
-    y1c = []
-    ran = 0
-    select = []
-    y2 = []
-    y2c = []
-    y3 = []
-    y3c = []
-    yp = []
-    ypc = []
-    won = "none"
+    player_cards = []
+    bot1_cards = []
+    bot2_cards = []
+    public_cards = []
+    selected_cards = []
+    calculation_list = []
+    player_numbers = []
+    player_suits = []
+    random_card = 0
+    selected_cards = []
+    bot1_numbers = []
+    bot1_suits = []
+    bot2_numbers = []
+    bot2_suits = []
+    public_numbers = []
+    public_suits = []
+    winning_status = "none"
     bet = 200
-    score1 = 0
-    score2 = 0
-    q = 0
-    stat = 0
-    c = 0
+    bot1_score = 0
+    bot2_score = 0
+    fold_status = 0
+    previous_winning_status = 0
+    winning_info = 0
 
     # the following code is for extract data from table - "Money"
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
     cursor.execute("select Money.money from Money where id=1")
-    moneyl = cursor.fetchone()
-    money = moneyl[0]
+    moneylist = cursor.fetchone()
+    money = moneylist[0]
     conn.close()
-    money2 = money
+    money_before_bet = money
     money -= bet
+
+    if money < 0:
+        money = 2000
+        # after update money, we need to update to the data.db
+        conn = sqlite3.connect('data.db')
+        cursor = conn.cursor()
+        cursor.execute('''UPDATE Money SET money = ?
+                       WHERE id = ?''', (money, 1))
+        conn.commit()
+        conn.close()
+        return render_template("restart.html", title="play")
 
     # player's cards extraction
     for i in range(1, 3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
-        ran = random.randint(1, 52)
-        while select.count(ran) >= 1:
-            ran = random.randint(1, 52)
+        random_card = random.randint(1, 52)
+        while selected_cards.count(random_card) >= 1:
+            random_card = random.randint(1, 52)
         cursor.execute(f'''SELECT Card.id, Colour.colours, Number.numbers,
                     Card.name, Card.media
                        FROM Card JOIN Colour ON Card.colour = Colour.id
                        JOIN CardNumber ON Card.id = CardNumber.card_id
                        JOIN Number ON CardNumber.number_id = Number.id
-                       WHERE Card.id = {ran} ORDER BY Card.id''')
+                       WHERE Card.id = {random_card} ORDER BY Card.id''')
         cards = cursor.fetchone()
-        select.append(cards[0])
-        cardss.append(cards)
-        y1.append(cards[2])
-        y1c.append(cards[1])
-        p.append(cards[3])
+        selected_cards.append(cards[0])
+        player_cards.append(cards)
+        player_numbers.append(cards[2])
+        player_suits.append(cards[1])
         conn.close()
 
         # Bot's cards extraction
     for i in range(1, 3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
-        ran = random.randint(1, 52)
-        while select.count(ran) >= 1:
-            ran = random.randint(1, 52)
+        random_card = random.randint(1, 52)
+        while selected_cards.count(random_card) >= 1:
+            random_card = random.randint(1, 52)
         cursor.execute(f'''SELECT Card.id, Colour.colours, Number.numbers,
         Card.name, Card.media
                        FROM Card JOIN Colour ON Card.colour = Colour.id
                        JOIN CardNumber ON Card.id = CardNumber.card_id
                        JOIN Number ON CardNumber.number_id = Number.id
-                       WHERE Card.id = {ran} ORDER BY Card.id''')
+                       WHERE Card.id = {random_card} ORDER BY Card.id''')
         cards = cursor.fetchone()
-        select.append(cards[0])
-        cardss1.append(cards)
-        y2.append(cards[2])
-        y2c.append(cards[1])
-        p1.append(cards[3])
+        selected_cards.append(cards[0])
+        bot1_cards.append(cards)
+        bot1_numbers.append(cards[2])
+        bot1_suits.append(cards[1])
         conn.close()
 
         # bot2's cards extraction
     for i in range(1, 3):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
-        ran = random.randint(1, 52)
-        while select.count(ran) >= 1:
-            ran = random.randint(1, 52)
+        random_card = random.randint(1, 52)
+        while selected_cards.count(random_card) >= 1:
+            random_card = random.randint(1, 52)
         cursor.execute(f'''SELECT Card.id, Colour.colours, Number.numbers,
         Card.name, Card.media FROM Card
                        JOIN Colour ON Card.colour = Colour.id
                        JOIN CardNumber ON Card.id = CardNumber.card_id
                        JOIN Number ON CardNumber.number_id = Number.id
-                       WHERE Card.id = {ran} ORDER BY Card.id''')
+                       WHERE Card.id = {random_card} ORDER BY Card.id''')
         cards = cursor.fetchone()
-        select.append(cards[0])
-        cardss2.append(cards)
-        y3.append(cards[2])
-        y3c.append(cards[1])
-        p2.append(cards[3])
+        selected_cards.append(cards[0])
+        bot2_cards.append(cards)
+        bot2_numbers.append(cards[2])
+        bot2_suits.append(cards[1])
         conn.close()
 
         # public cards cards extraction
     for i in range(1, 6):
         conn = sqlite3.connect('data.db')
         cursor = conn.cursor()
-        ran = random.randint(1, 52)
-        while select.count(ran) >= 1:
-            ran = random.randint(1, 52)
+        random_card = random.randint(1, 52)
+        while selected_cards.count(random_card) >= 1:
+            random_card = random.randint(1, 52)
         cursor.execute(f'''SELECT Card.id, Colour.colours, Number.numbers,
         Card.name, Card.media
                        FROM Card JOIN Colour ON Card.colour = Colour.id
                        JOIN CardNumber ON Card.id = CardNumber.card_id
                        JOIN Number ON CardNumber.number_id = Number.id
-                       WHERE Card.id = {ran} ORDER BY Card.id''')
+                       WHERE Card.id = {random_card} ORDER BY Card.id''')
         cards = cursor.fetchone()
-        select.append(cards[0])
-        cardssp.append(cards)
-        yp.append(cards[2])
-        ypc.append(cards[1])
-        p.append(cards[3])
-        p1.append(cards[3])
+        selected_cards.append(cards[0])
+        public_cards.append(cards)
+        public_numbers.append(cards[2])
+        public_suits.append(cards[1])
         conn.close()
 
     # The following code is for assess the cards of player
-    z = 0
-    score = 0
-    threes = False
-    card = 0
-    y1.extend(yp)
-    y1c.extend(ypc)
-    y.append(y1)
-    for i in y:
+    previous_number = 0
+    player_score = 0
+    match_found = False
+    player_largest = 0
+    player_numbers.extend(public_numbers)
+    player_suits.extend(public_suits)
+    calculation_list.append(player_numbers)
+    for i in calculation_list:
         i.sort()
-        p.sort()
-        print(f"your card: {p}")
         if len(i) != 7:
             print("wrong amount")
             exit()
-        for ii in i:
+        for current_number in i:
             try:
-                ii = int(ii)
-                if 2 <= ii <= 14:
-                    for e in range(2, 15):
-                        if i.count(e) > 3:
-                            threes = True
-                            card = e
+                current_number = int(current_number)
+                if 2 <= current_number <= 14:
+                    for rank_candidate in range(2, 15):
+                        if i.count(rank_candidate) > 3:
+                            match_found = True
+                            player_largest = rank_candidate
                 else:
                     print("wrong input")
                     exit()
             except ValueError:
                 print("wrong")
                 exit()
-    if threes is True:
+    if match_found is True:
         print("there is a four of a kind in here")
-        score += 7
+        player_score += 7
         # the code above is checking the 4 of a kind
     else:
-        z = 0
-        threes = False
-        for i in y:
+        previous_number = 0
+        match_found = False
+        for i in calculation_list:
             i.sort()
-            for e in range(2, 15):
-                if i.count(e) > 2:
-                    for t in range(2, 15):
-                        if t != e:
-                            if i.count(t) > 1:
-                                threes = True
-                                card = e + t * 0.01
-        if threes is True:
+            for rank_candidate in range(2, 15):
+                if i.count(rank_candidate) > 2:
+                    for secondary_rank in range(2, 15):
+                        if secondary_rank != rank_candidate:
+                            if i.count(secondary_rank) > 1:
+                                match_found = True
+                                player_largest = (
+                                    rank_candidate + secondary_rank * 0.01
+                                )
+        if match_found is True:
             print("there is a full house in here")
-            score += 6
+            player_score += 6
             # the code above is checking full house
         else:
-            z = 0
-            threes = False
-            y1c.sort()
-            y1c.reverse()
-            for h in range(1, 5):
-                if y1c.count(h) > 4:
-                    for w in range(0, 5):
-                        threes = True
-                        card = y[0][w]
-                        if y1c[w] != h:
+            previous_number = 0
+            match_found = False
+            player_suits.sort()
+            player_suits.reverse()
+            for suit_candidate in range(1, 5):
+                if player_suits.count(suit_candidate) > 4:
+                    for unique_number in range(0, 5):
+                        match_found = True
+                        player_largest = calculation_list[0][unique_number]
+                        if player_suits[unique_number] != suit_candidate:
                             continue
-            if threes is True:
-                z = 0
-                T = 0
-                Straight = False
-                for i in y:
+            if match_found is True:
+                previous_number = 0
+                straight_counter = 0
+                straight_found = False
+                for i in calculation_list:
                     i.sort()
                     i.reverse()
-                    for ii in i:
+                    for current_number in i:
                         try:
-                            ii = int(ii)
-                            if z != 0:
-                                if ii-z == -1:
-                                    T = T+1
-                                elif ii-z == 0:
-                                    T = T
+                            current_number = int(current_number)
+                            if previous_number != 0:
+                                if current_number-previous_number == -1:
+                                    straight_counter = straight_counter+1
+                                elif current_number-previous_number == 0:
+                                    straight_counter = straight_counter
                                 else:
-                                    T = 0
-                            z = ii
-                            if T >= 4:
-                                Straight = True
-                                card = z
+                                    straight_counter = 0
+                            previous_number = current_number
+                            if straight_counter >= 4:
+                                straight_found = True
+                                player_largest = previous_number
                         except ValueError:
                             print("wrong")
                             exit()
-                if Straight is True:
+                if straight_found is True:
                     print("it's a straight flush")
-                    score += 10
+                    player_score += 10
                 else:
                     print("there is a flush in here")
-                    score += 5
+                    player_score += 5
             # the code above is checking flush and stright flush
             # because the 7 cards can not form full house and flush at once
             # the assess of stright flush can go after the full house
             else:
-                z = 0
-                T = 0
-                Straight = False
-                for i in y:
+                previous_number = 0
+                straight_counter = 0
+                straight_found = False
+                for i in calculation_list:
                     i.sort()
                     i.reverse()
-                    for ii in i:
+                    for current_number in i:
                         try:
-                            ii = int(ii)
-                            if z != 0:
-                                if ii-z == -1:
-                                    T = T+1
-                                elif ii-z == 0:
-                                    T = T
+                            current_number = int(current_number)
+                            if previous_number != 0:
+                                if current_number-previous_number == -1:
+                                    straight_counter = straight_counter+1
+                                elif current_number-previous_number == 0:
+                                    straight_counter = straight_counter
                                 else:
-                                    T = 0
-                            z = ii
-                            if T >= 4:
-                                Straight = True
-                                card = z
+                                    straight_counter = 0
+                            previous_number = current_number
+                            if straight_counter >= 4:
+                                straight_found = True
+                                player_largest = previous_number
                                 break
                         except ValueError:
                             print("wrong")
                             exit()
-                if Straight is True:
+                if straight_found is True:
                     print("it's a straight")
-                    score += 4
-                    # the code above is checking the Straight
+                    player_score += 4
+                    # the code above is checking the straight_found
                 else:
-                    z = 0
-                    threes = False
-                    for i in y:
+                    previous_number = 0
+                    match_found = False
+                    for i in calculation_list:
                         i.sort()
-                        for e in range(2, 15):
-                            if i.count(e) > 2:
-                                threes = True
-                                card = e
-                    if threes is True:
+                        for rank_candidate in range(2, 15):
+                            if i.count(rank_candidate) > 2:
+                                match_found = True
+                                player_largest = rank_candidate
+                    if match_found is True:
                         print("there is a three of a kind in here")
-                        score += 3
+                        player_score += 3
                         # the code above is checking the 3 of a kind
                     else:
                         pair = 0
-                        z = 0
-                        for i in y:
+                        previous_number = 0
+                        for i in calculation_list:
                             i.sort()
-                            for ii in i:
-                                ii = int(ii)
-                                if z != 0:
-                                    if ii == z:
+                            for current_number in i:
+                                current_number = int(current_number)
+                                if previous_number != 0:
+                                    if current_number == previous_number:
                                         pair = pair + 1
-                                        if card == 0:
-                                            card = ii
+                                        if player_largest == 0:
+                                            player_largest = current_number
                                         else:
-                                            card += ii * 3
-                                z = ii
+                                            current_number *= 3
+                                            player_largest += current_number
+                                            current_number /= 3
+                                previous_number = current_number
                             if pair > 2:
                                 pair = 2
                             if pair != 0:
                                 print(f"there is {pair} pairs in here")
-                                score += pair
+                                player_score += pair
                             else:
-                                print("Biggest card")
-                                score = 0
+                                print("Biggest player_largest")
+                                player_score = 0
                                 i.sort()
-                                card = y[0][6]
-                            # the code above is checking pairs and Big card
+                                player_largest = calculation_list[0][6]
+                            # the code above is checking pairs and Big pcard
 
     # The following code is for assess the cards of CPU
-    z = 0
-    score1 = 0
-    y = []
-    threes = False
-    card1 = 0
-    y2.extend(yp)
-    y2c.extend(ypc)
-    y.append(y2)
-    y.sort()
-    for i in y:
+    previous_number = 0
+    bot1_score = 0
+    calculation_list = []
+    match_found = False
+    bot1_largest = 0
+    bot1_numbers.extend(public_numbers)
+    bot1_suits.extend(public_suits)
+    calculation_list.append(bot1_numbers)
+    calculation_list.sort()
+    for i in calculation_list:
         i.sort()
-        p1.sort()
-        print(f"Bot 1's card {p1}")
         if len(i) != 7:
             print("wrong amount")
             exit()
-        for ii in i:
+        for current_number in i:
             try:
-                ii = int(ii)
-                if 2 <= ii <= 14:
-                    for e in range(2, 15):
-                        if i.count(e) > 3:
-                            threes = True
-                            card1 = e
+                current_number = int(current_number)
+                if 2 <= current_number <= 14:
+                    for rank_candidate in range(2, 15):
+                        if i.count(rank_candidate) > 3:
+                            match_found = True
+                            bot1_largest = rank_candidate
                 else:
                     print("wrong input")
                     exit()
             except ValueError:
                 print("wrong")
                 exit()
-    if threes is True:
+    if match_found is True:
         print("there is a four of a kind in here")
-        score1 += 7
+        bot1_score += 7
         # the code above is checking the 4 of a kind
     else:
-        z = 0
-        threes = False
-        for i in y:
+        previous_number = 0
+        match_found = False
+        for i in calculation_list:
             i.sort()
-            for e in range(2, 15):
-                if i.count(e) > 2:
-                    for t in range(2, 15):
-                        if t != e:
-                            if i.count(t) > 1:
-                                threes = True
-                                card1 = e + t * 0.01
-        if threes is True:
+            for rank_candidate in range(2, 15):
+                if i.count(rank_candidate) > 2:
+                    for secondary_rank in range(2, 15):
+                        if secondary_rank != rank_candidate:
+                            if i.count(secondary_rank) > 1:
+                                match_found = True
+                                bot1_largest = (
+                                    rank_candidate + secondary_rank * 0.01
+                                )
+        if match_found is True:
             print("there is a full house in here")
-            score1 += 6
+            bot1_score += 6
             # the code above is checking full house
         else:
-            z = 0
-            threes = False
-            y2c.sort()
-            y2c.reverse()
-            for h in range(1, 5):
-                if y2c.count(h) > 4:
-                    for w in range(0, 5):
-                        threes = True
-                        card1 = y[0][w]
-                        if y2c[w] != h:
+            previous_number = 0
+            match_found = False
+            bot1_suits.sort()
+            bot1_suits.reverse()
+            for suit_candidate in range(1, 5):
+                if bot1_suits.count(suit_candidate) > 4:
+                    for unique_number in range(0, 5):
+                        match_found = True
+                        bot1_largest = calculation_list[0][unique_number]
+                        if bot1_suits[unique_number] != suit_candidate:
                             continue
-            if threes is True:
-                z = 0
-                T = 0
-                Straight = False
-                for i in y:
+            if match_found is True:
+                previous_number = 0
+                straight_counter = 0
+                straight_found = False
+                for i in calculation_list:
                     i.sort()
                     i.reverse()
-                    for ii in i:
+                    for current_number in i:
                         try:
-                            ii = int(ii)
-                            if z != 0:
-                                if ii-z == -1:
-                                    T = T+1
-                                elif ii-z == 0:
-                                    T = T
+                            current_number = int(current_number)
+                            if previous_number != 0:
+                                if current_number-previous_number == -1:
+                                    straight_counter = straight_counter+1
+                                elif current_number-previous_number == 0:
+                                    straight_counter = straight_counter
                                 else:
-                                    T = 0
-                            z = ii
-                            if T >= 4:
-                                Straight = True
-                                card1 = z
+                                    straight_counter = 0
+                            previous_number = current_number
+                            if straight_counter >= 4:
+                                straight_found = True
+                                bot1_largest = previous_number
                         except ValueError:
                             print("wrong")
                             exit()
-                if Straight is True:
+                if straight_found is True:
                     print("it's a straight flush")
-                    score1 += 10
+                    bot1_score += 10
                 else:
                     print("there is a flush in here")
-                    score1 += 5
+                    bot1_score += 5
             # the code above is checking flush and stright flush
             # because the 7 cards can not form full house and flush at once
             # the assess of stright flush can go after the full house
             else:
-                z = 0
-                T = 0
-                Straight = False
-                for i in y:
+                previous_number = 0
+                straight_counter = 0
+                straight_found = False
+                for i in calculation_list:
                     i.sort()
                     i.reverse()
-                    for ii in i:
+                    for current_number in i:
                         try:
-                            ii = int(ii)
-                            if z != 0:
-                                if ii-z == -1:
-                                    T = T+1
-                                elif ii-z == 0:
-                                    T = T
+                            current_number = int(current_number)
+                            if previous_number != 0:
+                                if current_number-previous_number == -1:
+                                    straight_counter = straight_counter+1
+                                elif current_number-previous_number == 0:
+                                    straight_counter = straight_counter
                                 else:
-                                    T = 0
-                            z = ii
-                            if T >= 4:
-                                Straight = True
-                                card1 = z
+                                    straight_counter = 0
+                            previous_number = current_number
+                            if straight_counter >= 4:
+                                straight_found = True
+                                bot1_largest = previous_number
                                 break
                         except ValueError:
                             print("wrong")
                             exit()
-                if Straight is True:
+                if straight_found is True:
                     print("it's a straight")
-                    score1 += 4
-                    # the code above is checking the Straight
+                    bot1_score += 4
+                    # the code above is checking the straight_found
                 else:
-                    z = 0
-                    threes = False
-                    for i in y:
+                    previous_number = 0
+                    match_found = False
+                    for i in calculation_list:
                         i.sort()
-                        for e in range(2, 15):
-                            if i.count(e) > 2:
-                                threes = True
-                                card1 = e
-                    if threes is True:
+                        for rank_candidate in range(2, 15):
+                            if i.count(rank_candidate) > 2:
+                                match_found = True
+                                bot1_largest = rank_candidate
+                    if match_found is True:
                         print("there is a three of a kind in here")
-                        score1 += 3
+                        bot1_score += 3
                         # the code above is checking the 3 of a kind
                     else:
                         pair = 0
-                        z = 0
-                        for i in y:
+                        previous_number = 0
+                        for i in calculation_list:
                             i.sort()
-                            for ii in i:
-                                ii = int(ii)
-                                if z != 0:
-                                    if ii == z:
+                            for current_number in i:
+                                current_number = int(current_number)
+                                if previous_number != 0:
+                                    if current_number == previous_number:
                                         pair = pair + 1
-                                        if card1 == 0:
-                                            card1 = ii
+                                        if bot1_largest == 0:
+                                            bot1_largest = current_number
                                         else:
-                                            card1 += ii * 3
-                                z = ii
+                                            bot1_largest += current_number * 3
+                                previous_number = current_number
                             if pair > 2:
                                 pair = 2
                             if pair != 0:
                                 print(f"there is {pair} pairs in here")
-                                score1 += pair
+                                bot1_score += pair
                             else:
-                                print("Biggest card")
-                                score1 = 0
+                                print("Biggest player_largest")
+                                bot1_score = 0
                                 i.sort()
-                                card1 = y[0][6]
+                                bot1_largest = calculation_list[0][6]
                             # the code above is checking pairs and Big card
 
 # The following code is for assess the cards of CPU2
-    z = 0
-    score2 = 0
-    y = []
-    threes = False
-    card2 = 0
-    y3.extend(yp)
-    y3c.extend(ypc)
-    y.append(y3)
-    y.sort()
-    for i in y:
+    previous_number = 0
+    bot2_score = 0
+    calculation_list = []
+    match_found = False
+    bot2_largest = 0
+    bot2_numbers.extend(public_numbers)
+    bot2_suits.extend(public_suits)
+    calculation_list.append(bot2_numbers)
+    calculation_list.sort()
+    for i in calculation_list:
         i.sort()
-        p2.sort()
-        print(f"Bot 1's card {p2}")
         if len(i) != 7:
             print("wrong amount")
             exit()
-        for ii in i:
+        for current_number in i:
             try:
-                ii = int(ii)
-                if 2 <= ii <= 14:
-                    for e in range(2, 15):
-                        if i.count(e) > 3:
-                            threes = True
-                            card2 = e
+                current_number = int(current_number)
+                if 2 <= current_number <= 14:
+                    for rank_candidate in range(2, 15):
+                        if i.count(rank_candidate) > 3:
+                            match_found = True
+                            bot2_largest = rank_candidate
                 else:
                     print("wrong input")
                     exit()
             except ValueError:
                 print("wrong")
                 exit()
-    if threes is True:
+    if match_found is True:
         print("there is a four of a kind in here")
-        score2 += 7
+        bot2_score += 7
         # the code above is checking the 4 of a kind
     else:
-        z = 0
-        threes = False
-        for i in y:
+        previous_number = 0
+        match_found = False
+        for i in calculation_list:
             i.sort()
-            for e in range(2, 15):
-                if i.count(e) > 2:
-                    for t in range(2, 15):
-                        if t != e:
-                            if i.count(t) > 1:
-                                threes = True
-                                card2 = e + t * 0.01
-        if threes is True:
+            for rank_candidate in range(2, 15):
+                if i.count(rank_candidate) > 2:
+                    for secondary_rank in range(2, 15):
+                        if secondary_rank != rank_candidate:
+                            if i.count(secondary_rank) > 1:
+                                match_found = True
+                                bot2_largest = (
+                                    rank_candidate + secondary_rank * 0.01
+                                )
+        if match_found is True:
             print("there is a full house in here")
-            score2 += 6
+            bot2_score += 6
             # the code above is checking full house
         else:
-            z = 0
-            threes = False
-            y3c.sort()
-            y3c.reverse()
-            for h in range(1, 5):
-                if y3c.count(h) > 4:
-                    for w in range(0, 5):
-                        threes = True
-                        card2 = y[0][w]
-                        if y3c[w] != h:
+            previous_number = 0
+            match_found = False
+            bot2_suits.sort()
+            bot2_suits.reverse()
+            for suit_candidate in range(1, 5):
+                if bot2_suits.count(suit_candidate) > 4:
+                    for unique_number in range(0, 5):
+                        match_found = True
+                        bot2_largest = calculation_list[0][unique_number]
+                        if bot2_suits[unique_number] != suit_candidate:
                             continue
-            if threes is True:
-                z = 0
-                T = 0
-                Straight = False
-                for i in y:
+            if match_found is True:
+                previous_number = 0
+                straight_counter = 0
+                straight_found = False
+                for i in calculation_list:
                     i.sort()
                     i.reverse()
-                    for ii in i:
+                    for current_number in i:
                         try:
-                            ii = int(ii)
-                            if z != 0:
-                                if ii-z == -1:
-                                    T = T+1
-                                elif ii-z == 0:
-                                    T = T
+                            current_number = int(current_number)
+                            if previous_number != 0:
+                                if current_number-previous_number == -1:
+                                    straight_counter = straight_counter+1
+                                elif current_number-previous_number == 0:
+                                    straight_counter = straight_counter
                                 else:
-                                    T = 0
-                            z = ii
-                            if T >= 4:
-                                Straight = True
-                                card2 = z
+                                    straight_counter = 0
+                            previous_number = current_number
+                            if straight_counter >= 4:
+                                straight_found = True
+                                bot2_largest = previous_number
                         except ValueError:
                             print("wrong")
                             exit()
-                if Straight is True:
+                if straight_found is True:
                     print("it's a straight flush")
-                    score2 += 10
+                    bot2_score += 10
                 else:
                     print("there is a flush in here")
-                    score2 += 5
+                    bot2_score += 5
             # the code above is checking flush and stright flush
             # because the 7 cards can not form full house and flush at once
             # the assess of stright flush can go after the full house
             else:
-                z = 0
-                T = 0
-                Straight = False
-                for i in y:
+                previous_number = 0
+                straight_counter = 0
+                straight_found = False
+                for i in calculation_list:
                     i.sort()
                     i.reverse()
-                    for ii in i:
+                    for current_number in i:
                         try:
-                            ii = int(ii)
-                            if z != 0:
-                                if ii-z == -1:
-                                    T = T+1
-                                elif ii-z == 0:
-                                    T = T
+                            current_number = int(current_number)
+                            if previous_number != 0:
+                                if current_number-previous_number == -1:
+                                    straight_counter = straight_counter+1
+                                elif current_number-previous_number == 0:
+                                    straight_counter = straight_counter
                                 else:
-                                    T = 0
-                            z = ii
-                            if T >= 4:
-                                Straight = True
-                                card2 = z
+                                    straight_counter = 0
+                            previous_number = current_number
+                            if straight_counter >= 4:
+                                straight_found = True
+                                bot2_largest = previous_number
                                 break
                         except ValueError:
                             print("wrong")
                             exit()
-                if Straight is True:
+                if straight_found is True:
                     print("it's a straight")
-                    score2 += 4
-                    # the code above is checking the Straight
+                    bot2_score += 4
+                    # the code above is checking the straight_found
                 else:
-                    z = 0
-                    threes = False
-                    for i in y:
+                    previous_number = 0
+                    match_found = False
+                    for i in calculation_list:
                         i.sort()
-                        for e in range(2, 15):
-                            if i.count(e) > 2:
-                                threes = True
-                                card2 = e
-                    if threes is True:
+                        for rank_candidate in range(2, 15):
+                            if i.count(rank_candidate) > 2:
+                                match_found = True
+                                bot2_largest = rank_candidate
+                    if match_found is True:
                         print("there is a three of a kind in here")
-                        score2 += 3
+                        bot2_score += 3
                         # the code above is checking the 3 of a kind
                     else:
                         pair = 0
-                        z = 0
-                        for i in y:
+                        previous_number = 0
+                        for i in calculation_list:
                             i.sort()
-                            for ii in i:
-                                ii = int(ii)
-                                if z != 0:
-                                    if ii == z:
+                            for current_number in i:
+                                current_number = int(current_number)
+                                if previous_number != 0:
+                                    if current_number == previous_number:
                                         pair = pair + 1
-                                        if card2 == 0:
-                                            card2 = ii
+                                        if bot2_largest == 0:
+                                            bot2_largest = current_number
                                         else:
-                                            card2 += ii * 3
-                                z = ii
+                                            bot2_largest += current_number * 3
+                                previous_number = current_number
                             if pair > 2:
                                 pair = 2
                             if pair != 0:
                                 print(f"there is {pair} pairs in here")
-                                score2 += pair
+                                bot2_score += pair
                             else:
-                                print("Biggest card")
-                                score2 = 0
+                                print("Biggest player_largest")
+                                bot2_score = 0
                                 i.sort()
-                                card2 = y[0][6]
+                                bot2_largest = calculation_list[0][6]
                             # the code above is checking pairs and Big card
-
     # the following code is for compare the cards
-    if q == 0:
-        print(card)
-        print(card1)
-        if score > score1 and score > score2:
-            won = "You won 400!"
-            c = 1
-        elif score1 > score and score1 > score2:
-            won = "Bot 1 won, you lost 200!"
-            c = -1
-        elif score2 > score and score2 > score1:
-            won = "Bot 2 won!, you lost 200!"
-            c = -1
-        elif (score > score1 and score == score2):
-            if card > card2:
-                won = "You won 400!"
-                c = 1
-            elif card2 > card:
-                won = "Bot 2 won, you lost 200!"
-                c = -1
+    if fold_status == 0:
+        print(player_largest)
+        print(bot1_largest)
+        if player_score > bot1_score and player_score > bot2_score:
+            winning_status = "You won 400!"
+            winning_info = 1
+        elif bot1_score > player_score and bot1_score > bot2_score:
+            winning_status = "Bot 1 won, you lost 200!"
+            winning_info = -1
+        elif bot2_score > player_score and bot2_score > bot1_score:
+            winning_status = "Bot 2 won!, you lost 200!"
+            winning_info = -1
+        elif (player_score > bot1_score and player_score == bot2_score):
+            if player_largest > bot2_largest:
+                winning_status = "You won 400!"
+                winning_info = 1
+            elif bot2_largest > player_largest:
+                winning_status = "Bot 2 won, you lost 200!"
+                winning_info = -1
             else:
-                won = "It's a draw, you won 100!"
-                c = 0.5
-        elif (score > score2 and score == score1):
-            if card > card1:
-                won = "You won 400!"
-                c = 1
-            elif card1 > card:
-                won = "Bot 1 won!, you lost 200!"
-                c = -1
+                winning_status = "It's a draw, you won 100!"
+                winning_info = 0.5
+        elif (player_score > bot2_score and player_score == bot1_score):
+            if player_largest > bot1_largest:
+                winning_status = "You won 400!"
+                winning_info = 1
+            elif bot1_largest > player_largest:
+                winning_status = "Bot 1 won!, you lost 200!"
+                winning_info = -1
             else:
-                won = "It's a draw, you won 100!"
-                c = 0.5
-        elif score < score1:  # player lost anyway, no need to compare bots'
-            won = "You lost 200!"
-            c = -1
+                winning_status = "It's a draw, you won 100!"
+                winning_info = 0.5
+        elif player_score < bot1_score:  # player lost anyway,no need to compar
+            winning_status = "You lost 200!"
+            winning_info = -1
         else:
-            if card > card1 and card > card2:
-                won = "You won 400!"
-                c = 1
-            elif card1 > card and card1 > card2:
-                won = "Bot 1 won, you lost 200!"
-                c = -1
-            elif card2 > card and card2 > card1:
-                won = "Bot 2 won, you lost 200!"
-                c = -1
-            elif (card == card1 and card > card2):
-                won = "It's a draw, you won 100!"
-                c = 0.5
-            elif (card == card2 and card > card1):
-                won = "It's a draw, you won 100!"
-                c = 0.5
-            elif card < card1:
-                won = "You lost 200!"
-                c = -1
+            if player_largest > bot1_largest and player_largest > bot2_largest:
+                winning_status = "You won 400!"
+                winning_info = 1
+            elif bot1_largest > player_largest and bot1_largest > bot2_largest:
+                winning_status = "Bot 1 won, you lost 200!"
+                winning_info = -1
+            elif bot2_largest > player_largest and bot2_largest > bot1_largest:
+                winning_status = "Bot 2 won, you lost 200!"
+                winning_info = -1
+            elif (player_largest == bot1_largest and
+                  player_largest > bot2_largest):
+                winning_status = "It's a draw, you won 100!"
+                winning_info = 0.5
+            elif (player_largest == bot2_largest and
+                  player_largest > bot1_largest):
+                winning_status = "It's a draw, you won 100!"
+                winning_info = 0.5
+            elif player_largest < bot1_largest:
+                winning_status = "You lost 200!"
+                winning_info = -1
             else:
-                won = "It's a draw, you lost nothing!"
+                winning_status = "It's a draw, you lost nothing!"
         print("\n")
 
-        if c == 1:
+        if winning_info == 1:
             money += bet * 3
-            stat = 2
-        if c == 0.5:
+            previous_winning_status = 2
+        if winning_info == 0.5:
             money += bet * 1.5
-            stat = 1
-        if c == 0:
+            previous_winning_status = 1
+        if winning_info == 0:
             money += bet
-            stat = -1
+            previous_winning_status = -1
         # if Bot win, player lose the bet money
 
     # after update money, we need to update to the data.db
     conn = sqlite3.connect('data.db')
     cursor = conn.cursor()
     cursor.execute('''UPDATE Money SET money = ?, won = ?
-    WHERE id = ?''', (money, stat, 1))
+    WHERE id = ?''', (money, previous_winning_status, 1))
     conn.commit()
     conn.close()
 
     return render_template("play.html",
                            title="play",
-                           stat=stat,
-                           cards=cardss,
-                           cardsp=cardssp,
-                           cards1=cardss1,
-                           cards2=cardss2,
-                           won=won,
+                           stat=previous_winning_status,
+                           cards=player_cards,
+                           cardsp=public_cards,
+                           cards1=bot1_cards,
+                           cards2=bot2_cards,
+                           won=winning_status,
                            money=money,
-                           money1=money2)
+                           money1=money_before_bet)
 
 
 @app.errorhandler(404)
