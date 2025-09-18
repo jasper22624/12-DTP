@@ -3,14 +3,6 @@ import sqlite3
 import random
 
 
-selected_cards = []
-random_card = 0
-player_cards = []
-money = 2000
-bot1_cards = []
-public_cards = []
-bot2_cards = []
-
 # The following code is for creating a table called 'Money'
 # This is for storage of varible - money
 conn = sqlite3.connect('data.db')
@@ -22,10 +14,10 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS Money
 conn.commit()
 
 cursor.execute('''UPDATE Money SET money = ?, won = ?
-WHERE id = ?''', (money, 0, 1))
+WHERE id = ?''', (2000, 0, 1))
 if cursor.rowcount == 0:  # if the data.db is intialized, we need to add data
     cursor.execute('''INSERT INTO Money (id, money, won)
-    VALUES (?, ?, ?)''', (1, money, 0))
+    VALUES (?, ?, ?)''', (1, 2000, 0))
 conn.commit()
 
 conn.close()
