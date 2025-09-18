@@ -621,7 +621,6 @@ def play():
                                 bot2_largest = previous_number
                         except ValueError:
                             print("wrong")
-                            exit()
                 if straight_found is True:
                     print("it's a straight flush")
                     bot2_score += 10
@@ -710,7 +709,7 @@ def play():
             winning_status = "Bot 1 won, you lost 200!"
             winning_info = -1
         elif bot2_score > player_score and bot2_score > bot1_score:
-            winning_status = "Bot 2 won!, you lost 200!"
+            winning_status = "Bot 2 won, you lost 200!"
             winning_info = -1
         elif (player_score > bot1_score and player_score == bot2_score):
             if player_largest > bot2_largest:
@@ -727,7 +726,7 @@ def play():
                 winning_status = "You won 400!"
                 winning_info = 1
             elif bot1_largest > player_largest:
-                winning_status = "Bot 1 won!, you lost 200!"
+                winning_status = "Bot 1 won, you lost 200!"
                 winning_info = -1
             else:
                 winning_status = "It's a draw, you won 100!"

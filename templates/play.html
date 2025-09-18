@@ -27,7 +27,7 @@
             <img src="{{ url_for('static', filename=cardsp[0][4]) }}" alt="{{cardsp[0][0][3]}}">
         </div>
         <div id="hiddenContent42" style="position: fixed;bottom: 30%;left: 33%;font-size: 32px;">    
-            {{won}}
+            You folded!
             {# not the ideal way to achieve this, but the easy way #}
             {% if stat == 2 %}
             Your current money: {{money-500}}
