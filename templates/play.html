@@ -1,32 +1,32 @@
 {% extends "index.html" %}
 {% block content %}
 <h2>This is the playing page</h2>
-<!--The number of showBtn are messed up, not affecting the display, i may fix it afterward-->
 
-<div id="hd241" style="position: fixed; bottom: 10px; left: 10px; color: white; font-size: 18px;">
+
+<div id="MoneyDisplay" style="position: fixed; bottom: 10px; left: 10px; color: white; font-size: 18px;">
     <h1>Money: ${{ money1 }}</h1>
 </div>
 
-<button class="btn-fold" id="showBtn69" style="position: absolute; justify-content: center; bottom: 300px; left: 51%; display: flex; align-items: center;">Fold</button>
+<button class="btn-fold" id="FoldBtn" style="position: absolute; justify-content: center; bottom: 300px; left: 51%; display: flex; align-items: center;">Fold</button>
 
-<div id="hiddenContent67" style="display: none;">
-    <div id="hiddenContent52" style="position: absolute;top: 30%;left: 10%;font-size: 32px;">    
-        <div id="hiddenContent32" style="position: fixed;bottom: 50%;left: 65%;">
+<div id="FoldShowingContent" style="display: none;">
+    <div style="position: absolute;top: 30%;left: 10%;font-size: 32px;">    
+        <div style="position: fixed;bottom: 50%;left: 65%;">
             <img src="{{ url_for('static', filename=cardsp[4][4]) }}" alt="{{cardsp[4][0][3]}}">
         </div>
-        <div id="hiddenContent22" style="position: fixed;bottom: 50%;left: 55%;">
+        <div style="position: fixed;bottom: 50%;left: 55%;">
             <img src="{{ url_for('static', filename=cardsp[3][4]) }}" alt="{{cardsp[3][0][3]}}">
         </div>
-        <div id="hiddenContent2" style="position: fixed;bottom: 50%;left: 45%;">
+        <div style="position: fixed;bottom: 50%;left: 45%;">
             <img src="{{ url_for('static', filename=cardsp[2][4]) }}" alt="{{cardsp[2][0][3]}}">
         </div>
-        <div id="hiddenContent1" style="position: fixed;bottom: 50%;left: 35%;">
+        <div style="position: fixed;bottom: 50%;left: 35%;">
             <img src="{{ url_for('static', filename=cardsp[1][4]) }}" alt="{{cardsp[1][0][3]}}">
         </div>
-        <div id="hiddenContent0" style="position: fixed;bottom: 50%;left: 25%;">
+        <div style="position: fixed;bottom: 50%;left: 25%;">
             <img src="{{ url_for('static', filename=cardsp[0][4]) }}" alt="{{cardsp[0][0][3]}}">
         </div>
-        <div id="hiddenContent42" style="position: fixed;bottom: 30%;left: 33%;font-size: 32px;">    
+        <div style="position: fixed;bottom: 30%;left: 33%;font-size: 32px;">    
             You folded!
             {# not the ideal way to achieve this, but the easy way #}
             {% if stat == 2 %}
@@ -42,17 +42,17 @@
             Your current money: {{money-100}}
             {% endif %}
         </div>
-        <div id="hiddenContent52" style="position: fixed;top: 30%;left: 5%;font-size: 32px;">    
+        <div style="position: fixed;top: 30%;left: 5%;font-size: 32px;">    
             <p>Bot 1's cards</p>
             <img src="{{ url_for('static', filename=cards1[0][4]) }}" alt="{{cards1[0][0][3]}}">
             <img src="{{ url_for('static', filename=cards1[1][4]) }}" alt="{{cards1[1][0][3]}}">
         </div>
-        <div id="hiddenContent62" style="position: fixed;top: 30%;right: 5%;font-size: 32px;">    
+        <div style="position: fixed;top: 30%;right: 5%;font-size: 32px;">    
             <p>Bot 2's cards:</p>
             <img src="{{ url_for('static', filename=cards2[0][4]) }}" alt="{{cards2[0][0][3]}}">
             <img src="{{ url_for('static', filename=cards2[1][4]) }}" alt="{{cards2[1][0][3]}}">
         </div>
-        <div id="hd772" style="position: fixed; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
+        <div style="position: fixed; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
             <form method="POST" style="position: fixed; bottom: 300px; left: 51%; display: flex; align-items: center; gap: 10px;">
                 <button type="submit" name="fold" class="btn-fold">Next Game</button>
             </form>
@@ -61,13 +61,13 @@
 </div>
 
 <script>
-document.getElementById('showBtn69').onclick = function() {
-    const content = document.getElementById('hiddenContent67');
+document.getElementById('FoldBtn').onclick = function() {
+    const content = document.getElementById('FoldShowingContent');
     document.getElementById('showBtn').style.display = 'none';
+    document.getElementById('showBtn1').style.display = 'none';
+    document.getElementById('showBtn2').style.display = 'none';
     document.getElementById('showBtn3').style.display = 'none';
-    document.getElementById('showBtn4').style.display = 'none';
-    document.getElementById('showBtn5').style.display = 'none';
-    document.getElementById('hd241').style.display = 'none';
+    document.getElementById('MoneyDisplay').style.display = 'none';
     content.style.display = 'block'; // Show the hidden content
     this.style.display = 'none';     // Hide the "Fold" button itself
 }
@@ -83,53 +83,53 @@ document.getElementById('showBtn69').onclick = function() {
 
 <button class="check" id="showBtn">Check</button>
 
-<div id="hiddenContent" style="display: none;">
-  <div id="hiddenContent0" style="position: fixed;bottom: 50%;left: 25%;">
+<div id="ThreePublicCards" style="display: none;">
+  <div style="position: fixed;bottom: 50%;left: 25%;">
     <img src="{{ url_for('static', filename=cardsp[0][4]) }}" alt="{{cardsp[0][0][3]}}">
   </div>
-  <div id="hiddenContent1" style="position: fixed;bottom: 50%;left: 35%;">
+  <div style="position: fixed;bottom: 50%;left: 35%;">
     <img src="{{ url_for('static', filename=cardsp[1][4]) }}" alt="{{cardsp[1][0][3]}}">
   </div>
-  <div id="hiddenContent2" style="position: fixed;bottom: 50%;left: 45%;">
+  <div style="position: fixed;bottom: 50%;left: 45%;">
     <img src="{{ url_for('static', filename=cardsp[2][4]) }}" alt="{{cardsp[2][0][3]}}">
   </div>
-    <button class="check" id="showBtn3">Check</button>
+    <button class="check" id="showBtn1">Check</button>
 
-    <div id="hiddenContent3" style="display: none;">
-        <div id="hiddenContent22" style="position: fixed;bottom: 50%;left: 55%;">
+    <div id="FourthPublicCard" style="display: none;">
+        <div style="position: fixed;bottom: 50%;left: 55%;">
             <img src="{{ url_for('static', filename=cardsp[3][4]) }}" alt="{{cardsp[3][0][3]}}">
         </div>
-        <button class="check" id="showBtn4">Check</button>
+        <button class="check" id="showBtn2">Check</button>
 
-        <div id="hiddenContent4" style="display: none;">
+        <div id="FifthPublicCard" style="display: none;">
             <div id="hiddenContent32" style="position: fixed;bottom: 50%;left: 65%;">
                 <img src="{{ url_for('static', filename=cardsp[4][4]) }}" alt="{{cardsp[4][0][3]}}">
             </div>
-            <button class="check" id="showBtn5">Results</button>
+            <button class="check" id="showBtn3">Results</button>
 
-            <div id="hiddenContent5" style="display: none;">
-                <div id="hiddenContent42" style="position: absolute;bottom: 30%;left: 33%;font-size: 32px;">    
+            <div id="Result" style="display: none;">
+                <div style="position: absolute;bottom: 30%;left: 33%;font-size: 32px;">    
                     {{won}}
                     Your current money: {{money}}
                 </div>
 
-                <div id="hiddenContent6">
-                    <div id="hiddenContent52" style="position: absolute;top: 30%;left: 5%;font-size: 32px;">    
+                <div id="Bot1Cards">
+                    <div style="position: absolute;top: 30%;left: 5%;font-size: 32px;">    
                         <p>Bot 1's cards</p>
                         <img src="{{ url_for('static', filename=cards1[0][4]) }}" alt="{{cards1[0][0][3]}}">
                         <img src="{{ url_for('static', filename=cards1[1][4]) }}" alt="{{cards1[1][0][3]}}">
                     </div>
                 </div>
 
-                <div id="bot2Cards">
-                    <div id="hiddenContent62" style="position: absolute;top: 30%;right: 5%;font-size: 32px;">    
+                <div id="Bot2Cards">
+                    <div style="position: absolute;top: 30%;right: 5%;font-size: 32px;">    
                         <p>Bot 2's cards:</p>
                         <img src="{{ url_for('static', filename=cards2[0][4]) }}" alt="{{cards2[0][0][3]}}">
                         <img src="{{ url_for('static', filename=cards2[1][4]) }}" alt="{{cards2[1][0][3]}}">
                     </div>
                 </div>
 
-                <div id="hd732" style="position: fixed; bottom: 300px; left: 40%; display: flex; align-items: center; gap: 10px;">
+                <div id="RefreshBtn" style="position: fixed; bottom: 300px; left: 40%; display: flex; align-items: center; gap: 10px;">
                     <a href="play" style="text-decoration: none; color: white; background-color: rgb(66, 77, 66); padding: 20px 40px; border-radius: 10px; font-size: 20px;">
                         click to play another game
                     </a>
@@ -137,7 +137,7 @@ document.getElementById('showBtn69').onclick = function() {
 
                 <script>
                 document.getElementById('showBtn6').onclick = function() {
-                    const content = document.getElementById('hiddenContent6', 'bot2Cards', 'hd732');
+                    const content = document.getElementById('Bot1Cards', 'Bot2Cards', 'RefreshBtn');
                     content.style.display = 'block'; // Show the hidden content
                     this.style.display = 'none';     // Hide the button itself
                 }
@@ -146,19 +146,19 @@ document.getElementById('showBtn69').onclick = function() {
             </div>
 
             <script>
-            document.getElementById('showBtn5').onclick = function() {
-                const content = document.getElementById('hiddenContent5');
+            document.getElementById('showBtn3').onclick = function() {
+                const content = document.getElementById('Result');
                 content.style.display = 'block'; // Show the hidden content
                 this.style.display = 'none';     // Hide the button itself
-                document.getElementById('showBtn69').style.display = 'none';
-                document.getElementById('hd241').style.display = 'none';
+                document.getElementById('FoldBtn').style.display = 'none';
+                document.getElementById('MoneyDisplay').style.display = 'none';
             }
             </script>
             </div>
 
         <script>
-        document.getElementById('showBtn4').onclick = function() {
-            const content = document.getElementById('hiddenContent4');
+        document.getElementById('showBtn2').onclick = function() {
+            const content = document.getElementById('FifthPublicCard');
             content.style.display = 'block'; // Show the hidden content
             this.style.display = 'none';     // Hide the button itself
         }
@@ -166,8 +166,8 @@ document.getElementById('showBtn69').onclick = function() {
     </div>
 
     <script>
-    document.getElementById('showBtn3').onclick = function() {
-        const content = document.getElementById('hiddenContent3');
+    document.getElementById('showBtn1').onclick = function() {
+        const content = document.getElementById('FourthPublicCard');
         content.style.display = 'block'; // Show the hidden content
         this.style.display = 'none';     // Hide the button itself
     }
@@ -178,7 +178,7 @@ document.getElementById('showBtn69').onclick = function() {
 
 <script>
   document.getElementById('showBtn').onclick = function() {
-    const content = document.getElementById('hiddenContent');
+    const content = document.getElementById('ThreePublicCards');
     content.style.display = 'block'; // Show the hidden content
     this.style.display = 'none';     // Hide the button itself
   }
